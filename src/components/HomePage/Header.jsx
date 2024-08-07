@@ -25,7 +25,7 @@ const Header = () => {
                     </a></li>
                 </ul>
                 <div className="offcanvas__logo">
-                    <a href="./index.html"><img src="img/logo.png" alt="Logo" /></a>
+                    <a href="./index.html"><img src="/img/logo.png" alt="Logo" /></a>
                 </div>
                 <nav className="offcanvas__menu">
                     <ul>
@@ -46,8 +46,8 @@ const Header = () => {
                     </ul>
                 </nav>
                 <div className="offcanvas__auth">
-                    <a href="#">Login</a>
-                    <a href="#">Register</a>
+                    <a href="/auth/signin">Login</a>
+                    <a href="/auth/signup">Register</a>
                 </div>
                 <ul>
                                     <li className="active"><a href="./index.html">Home</a></li>
@@ -56,9 +56,9 @@ const Header = () => {
                                     <li><a href="./shop.html">Shop</a></li>
                                     <li><a href="#">Pages</a>
                                         <ul className="dropdown">
-                                            <li><a href="./product-details.html">Product Details</a></li>
-                                            <li><a href="./shop-cart.html">Shop Cart</a></li>
-                                            <li><a href="./checkout.html">Checkout</a></li>
+                                            <li><a href="./Product/viewbyid">Product Details</a></li>
+                                            <li><a href="./cart">Shop Cart</a></li>
+                                            <li><a href="/Product/CheckoutbyId">Checkout</a></li>
                                             <li><a href="./blog-details.html">Blog Details</a></li>
                                         </ul>
                                     </li>
@@ -83,9 +83,9 @@ const Header = () => {
                                     <li><a href="./shop.html">Shop</a></li>
                                     <li><a href="#">Pages</a>
                                         <ul className="dropdown">
-                                            <li><a href="./product-details.html">Product Details</a></li>
-                                            <li><a href="./shop-cart.html">Shop Cart</a></li>
-                                            <li><a href="./checkout.html">Checkout</a></li>
+                                            <li><a href="/Product/viewbyid">Product Details</a></li>
+                                            <li><a href="./cart">Shop Cart</a></li>
+                                            <li><a href="/Product/CheckoutbyId">Checkout</a></li> 
                                             <li><a href="./blog-details.html">Blog Details</a></li>
                                         </ul>
                                     </li>
@@ -97,8 +97,8 @@ const Header = () => {
                         <div className="col-xl-3 col-lg-3">
                             <div className="header__right">
                                 <div className="header__right__auth">
-                                    <a href="#">Login</a>
-                                    <a href="#">Register</a>
+                                    <a href="/auth/signin">Login</a>
+                                    <a href="/auth/signup">Register</a>
                                 </div>
                                 <ul className="header__right__widget">
                                     <li><span className="icon_search search-switch"><CiSearch size="25"/></span></li>

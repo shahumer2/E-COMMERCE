@@ -1061,13 +1061,6 @@ ol {
 	position: relative;
 }
 
-.breadcrumb__links a:after {
-	position: absolute;
-	right: -14px;
-	top: 0;
-	content: "";
-	font-family: "FontAwesome";
-}
 
 .breadcrumb__links a i {
 	margin-right: 5px;
@@ -1078,6 +1071,14 @@ ol {
 	font-weight: 500;
 	color: #888888;
 	display: inline-block;
+}
+.rating {
+    display: flex;
+    align-items: center; /* Optional: Aligns stars vertically in the center */
+}
+
+.rating .fa-star {
+    margin-right: 5px;
 }
 
 /*---------------------
@@ -2497,6 +2498,7 @@ ol {
 
 .checkout__order .site-btn {
 	width: 100%;
+	background: #ca1515;
 }
 
 .checkout__order__product {

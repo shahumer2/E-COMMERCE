@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import Breadcrumb from '../Breadcrumbs/Breadcrumb';
-import DefaultLayout from '../../layout/DefaultLayout';
-import MaterialPoModal from '../../hooks/MaterialPoModal';  // Import the modal component
+import Breadcrumb from '../../Breadcrumbs/Breadcrumb';
+import DefaultLayout from '../../../layout/DefaultLayout';
+import MaterialPoModal from '../../../hooks/MaterialPoModal';  // Import the modal component
 import { FiEdit, FiTrash2 } from "react-icons/fi";
-import Pagination from '../Pagination/Pagination';
+import Pagination from '../../Pagination/Pagination';
 import { Link } from 'react-router-dom';
-import useSupplier from '../../hooks/useSupplier';
+import useSupplier from '../../../hooks/useSupplier';
 import { ErrorMessage, Field } from 'formik';
 
 const ViewSupplier = () => {
   const { Supplier, getSupplier, handleDelete, pagination, handleUpdate, handlePageChange, GetSupplierById } = useSupplier();
   const [showModal, setShowModal] = useState(false);
-  const [selectedMaterialPos, setSelectedMaterialPos] = useState([]);
+  const [selectedMaterialPos, setSelectedMaterialPos] = useState([]);  
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {

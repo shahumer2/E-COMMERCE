@@ -1,0 +1,24 @@
+.breadcrumb-option {
+    padding: 10px 0;
+    background-color: #f4f4f4;
+}
+
+.breadcrumb__links {
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb__links a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+}
+
+.breadcrumb__links a span {
+    margin-left: 5px;
+}
+
+.breadcrumb__links span {
+    margin-left: 10px;
+}

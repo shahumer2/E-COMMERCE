@@ -14,13 +14,23 @@ import Alerts from './pages/UiElements/Alerts.js';
 import Buttons from './pages/UiElements/Buttons.js';
 import PrivateRoute from './PrivateRoute/PrivateRoute.jsx';
 
-import Supplier from './components/Configurator/Supplier.jsx';
 
-import AddSupplier from './components/Supplier/AddSupplier.jsx';
-import ViewSupplier from './components/Supplier/ViewSupplier.jsx';
+
+import AddProduct from './components/Admin/Product/AddProduct.jsx';
+
+
+
 import HomePage from './components/HomePage/HomePage.jsx';
 
+import ShopCart from './components/HomePage/Cart.jsx';
+import Checkout from './components/HomePage/Checkout.jsx';
 
+import Category from "./components/Admin/Configurator/Category.jsx"
+
+import Color from "./components/Admin/Configurator/Color.jsx"
+import Size from "./components/Admin/Configurator/Size.jsx"
+import Brand from "./components/Admin/Configurator/Brand.jsx"
+import Weight from "./components/Admin/Configurator/Weight.jsx"
 
 
 
@@ -35,6 +45,7 @@ function App() {
   }, [pathname]);
 
   useEffect(() => {
+
     setTimeout(() => setLoading(false), 1000);
   }, []);
 
@@ -52,49 +63,60 @@ function App() {
             </>
           }
         />
-          <Route
-            path="/auth/signup"
-            element={
-              <>
-                <PageTitle title="AddUser " />
-                <SignUp />
-              </>
-            }
-          />
+        <Route
+          path="/auth/signup"
+          element={
+            <>
+              <PageTitle title="AddUser " />
+              <SignUp />
+            </>
+          }
+        />
 
-          <Route
-            path="/chart"
-            element={
-              <>
-                <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                <Chart />
-              </>
-            }
-          />
-            <Route
-            path="/homepage"
-            element={
-              <>
-                <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                <HomePage />
-              </>
-            }
-          />
-          <Route
-            index
-            element={
-              <>
-                <PageTitle title="Dashboard" />
-                <Chart />
-              </>
-            }
-          />
+        <Route
+          path="/chart"
+          element={
+            <>
+              <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <Chart />
+            </>
+          }
+        />
+        <Route
+          path="/homepage"
+          element={
+            <>
+              <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <HomePage />
+            </>
+          }
+        />
+        <Route
+          index
+          element={
+            <>
+              <PageTitle title="Dashboard" />
+              <HomePage />
+            </>
+          }
+        />
+        <Route
+          path="/Product/CheckoutbyId"
+          element={
+            <>
+              <PageTitle title="View Weaver Emb" />
+              <Checkout />
+            </>
+          }
+        />
+
+
         <Route element={<PrivateRoute />}>
-      
-        
+
+
           {/*  Products realted routes  */}
 
-        
+
 
           <Route
             path="/tables"
@@ -146,41 +168,106 @@ function App() {
         </Route>
 
         {/* configurator */}
-       
+
+
+
         <Route
-          path="/configurator/suplier"
+          path="/Product/cart"
           element={
             <>
               <PageTitle title="Size" />
-              <Supplier />
+              <ShopCart />
             </>
           }
         />
-       
+
+
 
         {/* seperate routes */}
 
         <Route
-          path="/supplier/add"
+          path="/Product/add"
           element={
             <>
-              <PageTitle title="Add Weaver Emb" />
-              <AddSupplier />
+              <PageTitle title="Add Product" />
+              <AddProduct />
             </>
           }
         />
 
         <Route
-          path="/supplier/view"
+          path="/Product/category"
           element={
             <>
-              <PageTitle title="View Weaver Emb" />
-              <ViewSupplier />
+              <PageTitle title="Add Product" />
+              <Category />
             </>
           }
         />
 
-      
+
+
+
+        <Route
+          path="/brand"
+          element={
+            <>
+              <PageTitle title="Add Product" />
+              <Brand />
+            </>
+          }
+        />
+
+
+
+        <Route
+          path="/color"
+          element={
+            <>
+              <PageTitle title="Add Product" />
+              <Color />
+            </>
+          }
+        />
+
+<Route
+          path="/size"
+          element={
+            <>
+              <PageTitle title="Add Size" />
+              <Size />
+            </>
+          }
+        />
+        <Route
+          path="/weight"
+          element={
+            <>
+              <PageTitle title="Add Weight" />
+              <Weight/>
+            </>
+          }
+        />
+
+
+
+
+
+
+
+
+        <Route
+          path="/Product/CheckoutbyId"
+          element={
+            <>
+              <PageTitle title="View Weaver Emb" />
+              <Checkout />
+            </>
+          }
+        />
+
+
+
 
 
 

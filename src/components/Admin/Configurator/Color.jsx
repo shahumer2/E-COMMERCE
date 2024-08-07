@@ -1,25 +1,41 @@
-import React, { useEffect } from 'react';
-import DefaultLayout from '../../layout/DefaultLayout';
-import Breadcrumb from '../Breadcrumbs/Breadcrumb';
+import React, { useEffect, useState } from 'react';
+
+
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import ViewTable from './ViewTable';
-import Pagination from '../Pagination/Pagination';
-import useColors from '../../hooks/useColor'; // Adjust the import path as needed
 
 
-const AddColorGroup = () => {
+import { useDispatch, useSelector } from 'react-redux';
+
+import useColor from '../../../hooks/useColor';
+import DefaultLayout from '../../../layout/DefaultLayout';
+import Breadcrumb from '../../Breadcrumbs/Breadcrumb';
+
+const Color = () => {
+    const [searchvalue, setsearchvalue] = useState(''); // Initialize with empty string
+    const [searchQuery, setSearchQuery] = useState(''); // State to hold the actual search query
+
+    const state = useSelector((state) => state);
+    const { currentUser } = state.persisted.user;
+    const dispatch = useDispatch();
+    
+
+  
 
     const {
-        colors,
+        Colors,
         edit,
         currentColor,
-        pagination,
-        handlePageChange,
-        handleSubmit,
-        handleUpdate,
+        // pagination,
         handleDelete,
+        handleUpdate,
+        handleSubmit,
+        handlePageChange,
+    } = useColor(searchQuery);
 
-    } = useColors();
+    const handleSearch = () => {
+        setSearchQuery(searchvalue);
+    };
 
     return (
         <DefaultLayout>
@@ -30,8 +46,8 @@ const AddColorGroup = () => {
                     enableReinitialize={true}
                     validate={values => {
                         const errors = {};
-                        if (!values.colorName) {
-                            errors.colorName = 'Field is required';
+                        if (!values.name.trim()) {
+                            errors.name = 'Field is required';
                         }
                         return errors;
                     }}
@@ -52,33 +68,43 @@ const AddColorGroup = () => {
                                                 <label className="mb-2.5 block text-black dark:text-white">Color Name</label>
                                                 <Field
                                                     type="text"
-                                                    name="colorName"
+                                                    name="name"
                                                     placeholder="Enter Color Name"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-slate-700 dark:text-white dark:focus:border-primary"
                                                 />
-                                                <ErrorMessage name="colorName" component="div" className="text-red-500" />
+                                                <ErrorMessage name="name" component="div" className="text-red-500" />
                                             </div>
                                         </div>
                                         <button type="submit" className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90 mt-4" disabled={isSubmitting}>
                                             {edit ? 'Update Color' : 'Create Color'}
                                         </button>
                                     </div>
-
                                 </div>
                                 {!edit && (
                                     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                                         <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
                                             <h3 className="font-medium text-slate-500 text-center text-xl dark:text-white">
-                                                <ViewTable units={colors} title={'Color'} pagination={pagination} totalItems={pagination.totalItems} handleUpdate={handleUpdate} handleDelete={handleDelete} />
-                                                <Pagination
+                                                <div className="flex justify-center items-center p-3">
+                                                    <input
+                                                        type="text"
+                                                        name="search"
+                                                        placeholder="Search by Name"
+                                                        className="w-[300px] rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-slate-700 dark:text-white dark:focus:border-primary"
+                                                        onChange={(e) => setsearchvalue(e.target.value)}
+                                                    />
+                                                    <button type="button" className="w-[80px] h-12 rounded-lg bg-blue-700 text-white dark:bg-blue-600 dark:text-slate-300 ml-4" onClick={handleSearch}>Search</button>
+                                                </div>
+                                                <ViewTable Colors={Colors} searchvalue={searchvalue}  title={'Color'} handleDelete={handleDelete} handleUpdate={handleUpdate} />
+
+                                                {/* <ViewTable Colors={Colors} searchvalue={searchvalue} pagination={pagination} totalItems={pagination.totalItems} title={'Color'} handleDelete={handleDelete} handleUpdate={handleUpdate} /> */}
+                                                {/* <Pagination
                                                     totalPages={pagination.totalPages}
                                                     currentPage={pagination.currentPage}
                                                     handlePageChange={handlePageChange}
-                                                />
+                                                /> */}
                                             </h3>
                                         </div>
                                     </div>
-
                                 )}
                             </div>
                         </Form>
@@ -89,4 +115,4 @@ const AddColorGroup = () => {
     );
 };
 
-export default AddColorGroup;
+export default Color ;

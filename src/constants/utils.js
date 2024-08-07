@@ -44,13 +44,48 @@ export const DELETE_MATERIALPO_URL = `${BASE_URL}/purchaseOrder/`;
 
 //signup
 
+
 export const SIGNUPURL = `${BASE_URL}/api/v1/auth/signup`;
 
-//color url's
-export const ADD_COLOR_URL = `${BASE_URL}/colors`
-export const DELETE_COLOR_URL = `${BASE_URL}/colors`
-export const UPDATE_COLOR_URL = `${BASE_URL}/colors`
-export const GET_COLOR_URL = `${BASE_URL}/colors`
+//Category url's
+export const ADD_Category_URL = `${BASE_URL}/api/categories`
+export const DELETE_Category_URL = `${BASE_URL}/api/categories`
+export const UPDATE_Category_URL = `${BASE_URL}/api/categories`
+export const GET_Category_URL = `${BASE_URL}/api/categories`
+
+
+
+//color
+
+export const ADD_Color_URL = `${BASE_URL}/api/colors`
+export const DELETE_Color_URL = `${BASE_URL}/api/colors`
+export const UPDATE_Color_URL = `${BASE_URL}/api/colors`
+export const GET_Color_URL = `${BASE_URL}/api/colors`
+
+// size
+
+export const ADD_Size_URL = `${BASE_URL}/api/sizes`
+export const DELETE_Size_URL = `${BASE_URL}/api/sizes`
+export const UPDATE_Size_URL = `${BASE_URL}/api/sizes`
+export const GET_Size_URL = `${BASE_URL}/api/sizes`
+
+// weight
+
+export const ADD_Weight_URL = `${BASE_URL}/api/weights`
+export const DELETE_Weight_URL = `${BASE_URL}/api/weights`
+export const UPDATE_Weight_URL = `${BASE_URL}/api/weights`
+export const GET_Weight_URL = `${BASE_URL}/api/weights`
+
+
+
+//brand
+
+export const ADD_Brand_URL = `${BASE_URL}/api/brand`
+export const DELETE_Brand_URL = `${BASE_URL}/api/brand`
+export const UPDATE_Brand_URL = `${BASE_URL}/api/brand`
+export const GET_Brand_URL = `${BASE_URL}/api/brand`
+
+
 
 //create Inventory Material
 export const ADD_INVENTORY_URL = `${BASE_URL}/inventory`
@@ -69,8 +104,8 @@ export const GET_STOCKBYID_URL = `${BASE_URL}/stockjournal`
 export const UPDATE_STOCK_URL = `${BASE_URL}/stockjournal`
 export const DELETE_STOCK_URL = `${BASE_URL}/stockjournal/delete`
 
-
-
+//PRODUCTS
+export const ADD_PRODUCT_URL = `${BASE_URL}/products`
 
 
 export const options = {
@@ -94,19 +129,19 @@ export const customStyles = (theme) => ({
         ...provided,
         minHeight: '50px',
         fontSize: '16px',
-        backgroundColor: theme === 'dark' ? '#1D2A39' : '#fff',
-        color: theme === 'dark' ? '#fff' : '#000',
-        border: `1.5px solid ${theme === 'dark' ? '#3D4D60' : '#E5E5E5'}`, // Border color based on theme
+        backgroundCategory: theme === 'dark' ? '#1D2A39' : '#fff',
+        Category: theme === 'dark' ? '#fff' : '#000',
+        border: `1.5px solid ${theme === 'dark' ? '#3D4D60' : '#E5E5E5'}`, // Border Category based on theme
         borderRadius: '4px', // Assuming the same rounded border
         boxShadow: 'none', // Remove any default box shadow
         '&:hover': {
-            borderColor: state.isFocused ? '#3B82F6' : theme === 'dark' ? '#3D4D60' : '#E5E5E5', // Hover border color
+            borderCategory: state.isFocused ? '#3B82F6' : theme === 'dark' ? '#3D4D60' : '#E5E5E5', // Hover border Category
         },
         '&:focus': {
-            borderColor: state.isFocused ? '#3B82F6' : theme === 'dark' ? '#3D4D60' : '#E5E5E5', // Focus border color
+            borderCategory: state.isFocused ? '#3B82F6' : theme === 'dark' ? '#3D4D60' : '#E5E5E5', // Focus border Category
         },
         '&:active': {
-            borderColor: state.isFocused ? '#3B82F6' : theme === 'dark' ? '#3D4D60' : '#E5E5E5', // Active border color
+            borderCategory: state.isFocused ? '#3B82F6' : theme === 'dark' ? '#3D4D60' : '#E5E5E5', // Active border Category
         },
     }),
     valueContainer: (provided) => ({
@@ -118,22 +153,22 @@ export const customStyles = (theme) => ({
     input: (provided) => ({
         ...provided,
         fontSize: '16px',
-        color: theme === 'dark' ? '#fff' : '#000',
+        Category: theme === 'dark' ? '#fff' : '#000',
     }),
     singleValue: (provided) => ({
         ...provided,
         fontSize: '16px',
-        color: theme === 'dark' ? '#fff' : '#000',
+        Category: theme === 'dark' ? '#fff' : '#000',
     }),
     menu: (provided) => ({
         ...provided,
-        backgroundColor: theme === 'dark' ? '#1D2A39' : '#fff',
+        backgroundCategory: theme === 'dark' ? '#1D2A39' : '#fff',
         zIndex: 99999,
     }),
     option: (provided, state) => ({
         ...provided,
-        backgroundColor: state.isFocused ? (theme === 'dark' ? '#000' : '#f0f0f0') : 'transparent',
-        color: state.isFocused ? (theme === 'dark' ? '#fff' : '#000') : (theme === 'dark' ? '#fff' : '#000'),
+        backgroundCategory: state.isFocused ? (theme === 'dark' ? '#000' : '#f0f0f0') : 'transparent',
+        Category: state.isFocused ? (theme === 'dark' ? '#fff' : '#000') : (theme === 'dark' ? '#fff' : '#000'),
     }),
 });
 

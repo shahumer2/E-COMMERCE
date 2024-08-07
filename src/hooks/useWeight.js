@@ -1,61 +1,59 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { GET_LOCATION_URL, DELETE_LOCATION_URL, UPDATE_LOCATION_URL, ADD_LOCATION_URL } from "../Constants/utils";
+import { ADD_Weight_URL, GET_Weight_URL, UPDATE_Weight_URL, DELETE_Weight_URL } from "../constants/utils";
 
-const useLocation = () => {
+const useWeight = (searchValue) => {
     const { currentUser } = useSelector((state) => state?.persisted?.user);
     const { token } = currentUser;
-    const [location, setLocation] = useState([]);
+    const [Weight, setWeight] = useState([]);
     const [edit, setEdit] = useState(false);
-    const [currentLocation, setCurrentLocation] = useState({
-        address: "",
-        city: "",
-        state: "",
-        gstin: "",
-        pinCode: "",
-    });
-
+    const [currentWeight, setCurrentWeight] = useState({ value: '' });
+console.log(token,"hey token");
     const [pagination, setPagination] = useState({
         totalItems: 0,
-        data: [],
+        pagWeightList: [],
         totalPages: 0,
         currentPage: 1,
-        itemsPerPage:0
+        itemsPerPage: 0,
     });
 
     useEffect(() => {
-        getLocation(pagination.currentPage);
-    }, []);
+        console.log(`Fetching Weight with search value: ${searchValue}`);
+        getWeight(pagination.currentPage, searchValue);
+    }, [searchValue]);
 
-    const getLocation = async (page) => {
+    const getWeight = async (page, searchValue) => {
         try {
-            const response = await fetch(`${GET_LOCATION_URL}?page=${page}`, {
-                method: "GET",
+            console.log(`Sending request to fetch Weight with search value: ${searchValue}`);
+            const response = await fetch(`${GET_Weight_URL}`, {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
-                }
+                },
+                body: JSON.stringify({ name: searchValue })
             });
             const data = await response.json();
-            setLocation(data.content);
+            console.log('Received Weight data:', data);
+            setWeight(data.content);
             setPagination({
                 totalItems: data.totalElements,
-                pagUnitList: data.content,
+                pagWeightList: data.content,
                 totalPages: data.totalPages,
                 currentPage: data.number + 1,
-                itemsPerPage:data.size
+                itemsPerPage: data.size
             });
         } catch (error) {
             console.error(error);
-            toast.error("Failed to fetch Location");
+            toast.error("Failed to fetch Weight");
         }
     };
 
     const handleDelete = async (e, id) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${DELETE_LOCATION_URL}${id}`, {
+            const response = await fetch(`${DELETE_Weight_URL}${id}`, {
                 method: 'DELETE',
                 headers: {
                     "Content-Type": "application/json",
@@ -63,20 +61,19 @@ const useLocation = () => {
                 }
             });
 
-            const data = await response.json();
             if (response.ok) {
-                toast.success(`Location Deleted Successfully !!`);
+                toast.success(`Weight Deleted successfully`);   
 
-                // Check if the current page becomes empty
-                const isCurrentPageEmpty = location.length === 1;
+                const isCurrentPageEmpty = Weight.length === 1;
 
                 if (isCurrentPageEmpty && pagination.currentPage > 1) {
                     const previousPage = pagination.currentPage - 1;
                     handlePageChange(previousPage);
                 } else {
-                    getLocation(pagination.currentPage);
+                    getWeight(pagination.currentPage, searchValue);
                 }
             } else {
+                const data = await response.json();
                 toast.error(`${data.errorMessage}`);
             }
         } catch (error) {
@@ -88,12 +85,14 @@ const useLocation = () => {
     const handleUpdate = (e, item) => {
         e.preventDefault();
         setEdit(true);
-        setCurrentLocation(item);
+        setCurrentWeight(item);
     };
 
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+        console.log(values,"juju");
+
         try {
-            const url = edit ? `${UPDATE_LOCATION_URL}/${currentLocation.id}` : ADD_LOCATION_URL;
+            const url = edit ? `${UPDATE_Weight_URL}/${currentWeight.id}` : ADD_Weight_URL;
             const method = edit ? "PUT" : "POST";
 
             const response = await fetch(url, {
@@ -106,23 +105,18 @@ const useLocation = () => {
             });
 
             const data = await response.json();
+
             if (response.ok) {
-                toast.success(`Location ${edit ? 'updated' : 'added'} successfully`);
-                resetForm();
+                toast.success(`Weight ${edit ? 'updated' : 'added'} successfully`);
+              
                 setEdit(false);
-                setCurrentLocation({
-                    address: "",
-                    city: "",
-                    state: "",
-                    gstin: "",
-                    pinCode: "",
-                });
-                getLocation(pagination.currentPage); // Fetch updated Location
+                setCurrentWeight({ value: '' });
+                // getWeight(pagination.currentPage, searchValue);
             } else {
-                toast.error(`${data.errorMessage}`);
+                toast.error(`${data.errorMessage}`); 
             }
         } catch (error) {
-            console.error(error, response);
+            console.error(error);
             toast.error("An error occurred");
         } finally {
             setSubmitting(false);
@@ -130,15 +124,14 @@ const useLocation = () => {
     };
 
     const handlePageChange = (newPage) => {
-
         setPagination((prev) => ({ ...prev, currentPage: newPage }));
-        getLocation(newPage); // API is 0-indexed for pages
+        getWeight(newPage);
     };
 
     return {
-        location,
+        Weight,
         edit,
-        currentLocation,
+        currentWeight,
         pagination,
         handleDelete,
         handleUpdate,
@@ -147,4 +140,4 @@ const useLocation = () => {
     };
 };
 
-export default useLocation;
+export default useWeight;

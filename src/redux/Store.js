@@ -2,15 +2,16 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import storage from 'redux-persist/lib/storage';
 import userReducer from './Slice/UserSlice';
 import { persistReducer, persistStore } from 'redux-persist';
-import UnitReducer from "./Slice/UnitSlice"
+import UnitReducer from "./Slice/CategorySlice"
 import LocationReducer from "./Slice/LocationSlice";
 import MaterialReducer from "./Slice/MaterialSlice";
 import SupplierReducer from "./Slice/SupplierSlice";
-import ColorReducer from "./Slice/ColorGroupSlice";
+
 
 
 
 import ThemeSlice from "./Slice/ThemeSlice";
+import CategoryReducer from "./Slice/CategorySlice";
 
 
 // Persist config
@@ -38,7 +39,8 @@ const rootReducer = combineReducers({
     location: LocationReducer,
     material: MaterialReducer,
     supplier: SupplierReducer,
-    color:ColorReducer
+    category:CategoryReducer
+
 
   }),
 });

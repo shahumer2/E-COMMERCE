@@ -1,32 +1,32 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { ADD_Color_URL, GET_Color_URL, UPDATE_Color_URL, DELETE_Color_URL } from "../constants/utils";
+import { ADD_Brand_URL, GET_Brand_URL, UPDATE_Brand_URL, DELETE_Brand_URL } from "../constants/utils";
 
-const useColor = (searchValue) => {
+const useBrand = (searchValue) => {
     const { currentUser } = useSelector((state) => state?.persisted?.user);
     const { token } = currentUser;
-    const [Color, setColor] = useState([]);
+    const [Brand, setBrand] = useState([]);
     const [edit, setEdit] = useState(false);
-    const [currentColor, setCurrentColor] = useState({ name: '' });
+    const [currentBrand, setCurrentBrand] = useState({ name: '' });
 
     const [pagination, setPagination] = useState({
         totalItems: 0,
-        pagColorList: [],
+        pagBrandList: [],
         totalPages: 0,
         currentPage: 1,
         itemsPerPage: 0,
     });
 
     useEffect(() => {
-        console.log(`Fetching Color with search value: ${searchValue}`);
-        getColor(pagination.currentPage, searchValue);
+        console.log(`Fetching Brand with search value: ${searchValue}`);
+        getBrand(pagination.currentPage, searchValue);
     }, [searchValue]);
 
-    const getColor = async (page, searchValue) => {
+    const getBrand = async (page, searchValue) => {
         try {
-            console.log(`Sending request to fetch Color with search value: ${searchValue}`);
-            const response = await fetch(`${GET_Color_URL}`, {
+            console.log(`Sending request to fetch Brand with search value: ${searchValue}`);
+            const response = await fetch(`${GET_Brand_URL}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -35,25 +35,25 @@ const useColor = (searchValue) => {
                 body: JSON.stringify({ name: searchValue })
             });
             const data = await response.json();
-            console.log('Received Color data:', data);
-            setColor(data.content);
+            console.log('Received Brand data:', data);
+            setBrand(data.content);
             setPagination({
                 totalItems: data.totalElements,
-                pagColorList: data.content,
+                pagBrandList: data.content,
                 totalPages: data.totalPages,
                 currentPage: data.number + 1,
                 itemsPerPage: data.size
             });
         } catch (error) {
             console.error(error);
-            toast.error("Failed to fetch Color");
+            toast.error("Failed to fetch Brand");
         }
     };
 
     const handleDelete = async (e, id) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${DELETE_Color_URL}${id}`, {
+            const response = await fetch(`${DELETE_Brand_URL}${id}`, {
                 method: 'DELETE',
                 headers: {
                     "Content-Type": "application/json",
@@ -62,15 +62,15 @@ const useColor = (searchValue) => {
             });
 
             if (response.ok) {
-                toast.success(`Color Deleted successfully`);   
+                toast.success(`Brand Deleted successfully`);   
 
-                const isCurrentPageEmpty = Color.length === 1;
+                const isCurrentPageEmpty = Brand.length === 1;
 
                 if (isCurrentPageEmpty && pagination.currentPage > 1) {
                     const previousPage = pagination.currentPage - 1;
                     handlePageChange(previousPage);
                 } else {
-                    getColor(pagination.currentPage, searchValue);
+                    getBrand(pagination.currentPage, searchValue);
                 }
             } else {
                 const data = await response.json();
@@ -85,14 +85,14 @@ const useColor = (searchValue) => {
     const handleUpdate = (e, item) => {
         e.preventDefault();
         setEdit(true);
-        setCurrentColor(item);
+        setCurrentBrand(item);
     };
 
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
         console.log(values,"juju");
 
         try {
-            const url = edit ? `${UPDATE_Color_URL}/${currentColor.id}` : ADD_Color_URL;
+            const url = edit ? `${UPDATE_Brand_URL}/${currentBrand.id}` : ADD_Brand_URL;
             const method = edit ? "PUT" : "POST";
 
             const response = await fetch(url, {
@@ -107,11 +107,11 @@ const useColor = (searchValue) => {
             const data = await response.json();
 
             if (response.ok) {
-                toast.success(`Color ${edit ? 'updated' : 'added'} successfully`);
+                toast.success(`Brand ${edit ? 'updated' : 'added'} successfully`);
                 resetForm();
                 setEdit(false);
-                setCurrentColor({ name: '' });
-                getColor(pagination.currentPage, searchValue);
+                setCurrentBrand({ name: '' });
+                getBrand(pagination.currentPage, searchValue);
             } else {
                 toast.error(`${data.errorMessage}`); 
             }
@@ -125,13 +125,13 @@ const useColor = (searchValue) => {
 
     const handlePageChange = (newPage) => {
         setPagination((prev) => ({ ...prev, currentPage: newPage }));
-        getColor(newPage);
+        getBrand(newPage);
     };
 
     return {
-        Color,
+        Brand,
         edit,
-        currentColor,
+        currentBrand,
         pagination,
         handleDelete,
         handleUpdate,
@@ -140,4 +140,4 @@ const useColor = (searchValue) => {
     };
 };
 
-export default useColor;
+export default useBrand;
