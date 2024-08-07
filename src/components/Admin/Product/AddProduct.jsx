@@ -9,6 +9,10 @@ import Breadcrumb from '../../Breadcrumbs/Breadcrumb';
 import ReactSelect from 'react-select';
 import { IoIosAdd } from "react-icons/io";
 import useProduct from '../../../hooks/useProduct';
+import { fetchbrand } from '../../../redux/Slice/BrandSlice';
+import { fetchcolor } from '../../../redux/Slice/ColorSlice';
+import { fetchsize } from '../../../redux/Slice/SizeSlice';
+import { fetchweight } from '../../../redux/Slice/WeightSlice';
 
 const AddProduct = () => {
     const theme = useSelector(state => state?.persisted?.theme);
@@ -30,15 +34,28 @@ const AddProduct = () => {
     });
 
     const [categories, setCategories] = useState([]);
+    const [brands, setbrands] = useState([])
+    const [colors, setcolors] = useState([])
+    const [sizes, setsizes] = useState([])
+    const [weights, setweights] = useState([])
+
     const { currentUser } = useSelector((state) => state?.persisted?.user);
     const { token } = currentUser;
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(fetchcategory(token));
+        dispatch(fetchbrand(token));
+        dispatch(fetchcolor(token));
+        dispatch(fetchsize(token));
+        dispatch(fetchweight(token));
     }, [dispatch, token]);
 
     const category = useSelector(state => state?.nonPersisted?.category);
+    const brand = useSelector(state => state?.nonPersisted?.brand);
+    const color = useSelector(state => state?.nonPersisted?.color);
+    const size = useSelector(state => state?.nonPersisted?.size);
+    const weight = useSelector(state => state?.nonPersisted?.weight);
 
     useEffect(() => {
         if (category.data) {
@@ -48,8 +65,37 @@ const AddProduct = () => {
             }));
             setCategories(formattedOptions);
         }
-    }, [category.data]);
+        if (brand.data) {
+            const formattedOptions = brand.data.content.map(brand => ({
+                value: brand.id,
+                label: brand.name,
+            }));
+            setbrands(formattedOptions);
+        }
+        if (color.data) {
+            const formattedOptions = color.data.content.map(color => ({
+                value: color.id,
+                label: color.name,
+            }));
+            setcolors(formattedOptions);
+        }
+        if (size.data) {
+            const formattedOptions = size.data.content.map(size => ({
+                value: size.id,
+                label: size.name,
+            }));
+            setsizes(formattedOptions);
+        }
+        if (weight.data) {
+            const formattedOptions = weight.data.content.map(weight => ({
+                value: weight.id,
+                label: weight.value,
+            }));
+            setweights(formattedOptions);
+        }
+    }, [brand.data, category.data, weight.data, color.data, size.data]);
 
+console.log(weight,"klklklkl");
     const { handleSubmit } = useProduct();
     const [imagePreviews, setImagePreviews] = useState([]);
 
@@ -75,9 +121,9 @@ const AddProduct = () => {
                             status: "AVAILABLE",
                             categoryIds: [],
                             brandId: 0,
-                            slug:"",
-                            metaTitle:"",
-                            metaDescription:"",
+                            slug: "",
+                            metaTitle: "",
+                            metaDescription: "",
                             skus: [{
                                 sku: "",
                                 price: 0,
@@ -98,7 +144,7 @@ const AddProduct = () => {
                             basePrice: Yup.number().required('Required').positive(),
                             categoryIds: Yup.array().of(Yup.number().required('Required')).min(1, 'Select at least one category'),
                             brandId: Yup.number().required('Required'),
-                            
+
                         })
                     })}
                     onSubmit={(values, actions) => {
@@ -176,9 +222,9 @@ const AddProduct = () => {
                                             </div>
                                         </div>
 
-{/* meta Title meta description */}
+                                        {/* meta Title meta description */}
                                         <div className="mb-4.5 flex flex-wrap gap-6">
-                                        <div className="flex-1 min-w-[300px]">
+                                            <div className="flex-1 min-w-[300px]">
                                                 <label className="mb-2.5 block text-black dark:text-white">Meta Title</label>
                                                 <Field
                                                     type="text"
@@ -222,11 +268,11 @@ const AddProduct = () => {
                                         <div className="mb-4.5 flex flex-wrap gap-6">
                                             <div className="flex-1 min-w-[300px]">
                                                 <label className="mb-2.5 block text-black dark:text-white">Brand</label>
-                                              
+
                                                 <ReactSelect
                                                     isMulti
                                                     name="product.brandId"
-                                                    options={categories}
+                                                    options={brands}
                                                     classNamePrefix="react-select"
                                                     styles={createCustomStyles(theme)}
                                                     onChange={(selectedOptions) =>
@@ -307,10 +353,16 @@ const AddProduct = () => {
                                                                 <div className="mb-4.5 flex flex-wrap gap-6">
                                                                     <div className="flex-1 min-w-[300px]">
                                                                         <label className="mb-2.5 block text-black dark:text-white">Color ID</label>
-                                                                        <Field
-                                                                            type="number"
+
+                                                                        <ReactSelect
+                                                                            isMulti
                                                                             name={`product.skus.${index}.colorId`}
-                                                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                                            options={colors}
+                                                                            classNamePrefix="react-select"
+                                                                            styles={createCustomStyles(theme)}
+                                                                            onChange={(selectedOptions) =>
+                                                                                setFieldValue('product.categoryIds', selectedOptions.map(option => option.value))
+                                                                            }
                                                                         />
                                                                         <ErrorMessage name={`product.skus.${index}.colorId`} component="div" className="text-red-500" />
                                                                     </div>
@@ -340,10 +392,16 @@ const AddProduct = () => {
                                                                                     <div key={sizeIndex} className="flex flex-wrap gap-6">
                                                                                         <div className="flex-1 min-w-[300px]">
                                                                                             <label className="mb-2.5 block text-black dark:text-white">Size ID</label>
-                                                                                            <Field
-                                                                                                type="number"
+
+                                                                                            <ReactSelect
+
                                                                                                 name={`product.skus.${index}.sizes.${sizeIndex}.sizeId`}
-                                                                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                                                                options={sizes}
+                                                                                                classNamePrefix="react-select"
+                                                                                                styles={createCustomStyles(theme)}
+                                                                                                onChange={(selectedOptions) =>
+                                                                                                    setFieldValue('product.categoryIds', selectedOptions.map(option => option.value))
+                                                                                                }
                                                                                             />
                                                                                             <ErrorMessage name={`product.skus.${index}.sizes.${sizeIndex}.sizeId`} component="div" className="text-red-500" />
                                                                                         </div>
@@ -354,6 +412,7 @@ const AddProduct = () => {
                                                                                                 name={`product.skus.${index}.sizes.${sizeIndex}.quantity`}
                                                                                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                                                             />
+
                                                                                             <ErrorMessage name={`product.skus.${index}.sizes.${sizeIndex}.quantity`} component="div" className="text-red-500" />
                                                                                         </div>
                                                                                         <div className="flex items-end min-w-[50px]">
@@ -379,11 +438,18 @@ const AddProduct = () => {
                                                                                     <div key={weightIndex} className="flex flex-wrap gap-6">
                                                                                         <div className="flex-1 min-w-[300px]">
                                                                                             <label className="mb-2.5 block text-black dark:text-white">Weight ID</label>
-                                                                                            <Field
-                                                                                                type="number"
+
+                                                                                            <ReactSelect
+
                                                                                                 name={`product.skus.${index}.weights.${weightIndex}.weightId`}
-                                                                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                                                                options={weights}
+                                                                                                classNamePrefix="react-select"
+                                                                                                styles={createCustomStyles(theme)}
+                                                                                                onChange={(selectedOptions) =>
+                                                                                                    setFieldValue('product.categoryIds', selectedOptions.map(option => option.value))
+                                                                                                }
                                                                                             />
+
                                                                                             <ErrorMessage name={`product.skus.${index}.weights.${weightIndex}.weightId`} component="div" className="text-red-500" />
                                                                                         </div>
                                                                                         <div className="flex-1 min-w-[300px]">
@@ -393,6 +459,8 @@ const AddProduct = () => {
                                                                                                 name={`product.skus.${index}.weights.${weightIndex}.quantity`}
                                                                                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                                                             />
+
+
                                                                                             <ErrorMessage name={`product.skus.${index}.weights.${weightIndex}.quantity`} component="div" className="text-red-500" />
                                                                                         </div>
                                                                                         <div className="flex items-end min-w-[50px]">
@@ -417,25 +485,25 @@ const AddProduct = () => {
                                                         <button type="button" className="p-2.5 border rounded-md text-green-500" onClick={() => push({ sku: '', price: 0, attributes: [], colorId: 0, sizeSelected: false, weightSelected: false, sizes: [], weights: [] })}>
                                                             <IoIosAdd size={24} />
                                                         </button>
-                                                     <div className="mb-4.5 flex flex-wrap gap-6">
-                                                     <div className="flex-1 min-w-[300px]">
-                                                         <label className="mb-2.5 block text-black dark:text-white">Images</label>
-                                                         <input
-                                                             type="file"
-                                                             multiple
-                                                             accept="image/*"
-                                                             onChange={(event) => handleFileChange(event, setFieldValue)}
-                                                             className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                         />
-                                                         <div className="mt-4 flex gap-2">
-                                                             {imagePreviews.map((preview, index) => (
-                                                                 <img key={index} src={preview} alt="Preview" className="w-24 h-24 object-cover rounded" />
-                                                             ))}
-                                                         </div>
-                                                     </div>
-                                                 </div>
+                                                        <div className="mb-4.5 flex flex-wrap gap-6">
+                                                            <div className="flex-1 min-w-[300px]">
+                                                                <label className="mb-2.5 block text-black dark:text-white">Images</label>
+                                                                <input
+                                                                    type="file"
+                                                                    multiple
+                                                                    accept="image/*"
+                                                                    onChange={(event) => handleFileChange(event, setFieldValue)}
+                                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                                />
+                                                                <div className="mt-4 flex gap-2">
+                                                                    {imagePreviews.map((preview, index) => (
+                                                                        <img key={index} src={preview} alt="Preview" className="w-24 h-24 object-cover rounded" />
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-         
+
                                                 )}
                                             </FieldArray>
                                         </div>

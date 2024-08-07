@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { GET_Category_URL } from "../../constants/utils";
+import { GET_Weight_URL } from "../../constants/utils";
 
 
-export const fetchcategory = createAsyncThunk(
-  "fetchcategory",
+export const fetchweight = createAsyncThunk(
+  "fetchweight",
   async (accessToken) => {
-    const response = await fetch(GET_Category_URL, {
+    const response = await fetch(GET_Weight_URL, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -14,8 +14,8 @@ export const fetchcategory = createAsyncThunk(
   }
 );
 
-const categorySlice = createSlice({
-  name: "category",
+const weightSlice = createSlice({
+  name: "weight",
   initialState: {
     loading: false,
     data: null,
@@ -23,18 +23,18 @@ const categorySlice = createSlice({
   },
   //returned data is in action.payload
   extraReducers: (builder) => {
-    builder.addCase(fetchcategory.fulfilled, (state, action) => {
+    builder.addCase(fetchweight.fulfilled, (state, action) => {
       state.loading = false;
       state.data = action.payload;
       state.error = false;
     });
-    builder.addCase(fetchcategory.pending, (state, action) => {
+    builder.addCase(fetchweight.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(fetchcategory.rejected, (state, action) => {
+    builder.addCase(fetchweight.rejected, (state, action) => {
       state.loading = true;
       state.error = action.payload;
     });
   },
 });
-export default categorySlice.reducer;
+export default weightSlice.reducer;

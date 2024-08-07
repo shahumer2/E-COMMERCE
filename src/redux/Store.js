@@ -14,6 +14,12 @@ import ThemeSlice from "./Slice/ThemeSlice";
 import CategoryReducer from "./Slice/CategorySlice";
 
 
+import BrandReducer from "./Slice/BrandSlice";
+import ColorReducer from "./Slice/ColorSlice";
+import SizeReducer from "./Slice/SizeSlice";
+import WeightReducer from "./Slice/WeightSlice";
+
+
 // Persist config
 const persistConfig = {
   key: 'root',
@@ -39,7 +45,13 @@ const rootReducer = combineReducers({
     location: LocationReducer,
     material: MaterialReducer,
     supplier: SupplierReducer,
-    category:CategoryReducer
+    category:CategoryReducer,
+    
+    color:ColorReducer,
+    size:SizeReducer,
+    weight:WeightReducer,
+    brand:BrandReducer
+
 
 
   }),
