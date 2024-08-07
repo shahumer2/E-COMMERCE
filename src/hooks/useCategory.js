@@ -8,8 +8,8 @@ const useCategory = (searchValue) => {
     const { token } = currentUser;
     const [Category, setCategory] = useState([]);
     const [edit, setEdit] = useState(false);
-    const [currentCategory, setCurrentCategory] = useState({ name: '' });
-
+    const [currentCategory, setCurrentCategory] = useState({ name: '',slug:"" });
+console.log(Category,"frontttttttttttttttttttttttttt");
     const [pagination, setPagination] = useState({
         totalItems: 0,
         pagCategoryList: [],
@@ -19,23 +19,23 @@ const useCategory = (searchValue) => {
     });
 
     useEffect(() => {
-        console.log(`Fetching Category with search value: ${searchValue}`);
+  
         getCategory(pagination.currentPage, searchValue);
     }, [searchValue]);
 
     const getCategory = async (page, searchValue) => {
         try {
-            console.log(`Sending request to fetch Category with search value: ${searchValue}`);
+           
             const response = await fetch(`${GET_Category_URL}`, {
-                method: "POST",
+                method: "GET",
                 headers: {
-                    "Content-Type": "application/json",
+                    // "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify({ name: searchValue })
+                // body: JSON.stringify({ name: searchValue })
             });
             const data = await response.json();
-            console.log('Received Category data:', data);
+           
             setCategory(data.content);
             setPagination({
                 totalItems: data.totalElements,
@@ -53,7 +53,7 @@ const useCategory = (searchValue) => {
     const handleDelete = async (e, id) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${DELETE_Category_URL}${id}`, {
+            const response = await fetch(`${DELETE_Category_URL}/${id}`, {
                 method: 'DELETE',
                 headers: {
                     "Content-Type": "application/json",

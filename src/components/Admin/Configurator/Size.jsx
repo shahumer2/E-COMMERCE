@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import ViewTable from './ViewTable';
 
-
+import Pagination from '../../Pagination/Pagination';
 import { useDispatch, useSelector } from 'react-redux';
 
 import useSize from '../../../hooks/useSize';
@@ -26,7 +26,7 @@ const Size = () => {
         Sizes,
         edit,
         currentSize,
-        // pagination,
+        pagination,
         handleDelete,
         handleUpdate,
         handleSubmit,
@@ -94,14 +94,14 @@ const Size = () => {
                                                     />
                                                     <button type="button" className="w-[80px] h-12 rounded-lg bg-blue-700 text-white dark:bg-blue-600 dark:text-slate-300 ml-4" onClick={handleSearch}>Search</button>
                                                 </div> */}
-                                                <ViewTable Sizes={Sizes} searchvalue={searchvalue}  title={'Size'} handleDelete={handleDelete} handleUpdate={handleUpdate} />
+                                              
 
-                                                {/* <ViewTable Sizes={Sizes} searchvalue={searchvalue} pagination={pagination} totalItems={pagination.totalItems} title={'Size'} handleDelete={handleDelete} handleUpdate={handleUpdate} /> */}
-                                                {/* <Pagination
+                                                <ViewTable units={Sizes} searchvalue={searchvalue} pagination={pagination} totalItems={pagination.totalItems} title={'Unit'} handleDelete={handleDelete} handleUpdate={handleUpdate} />
+                                                <Pagination
                                                     totalPages={pagination.totalPages}
                                                     currentPage={pagination.currentPage}
                                                     handlePageChange={handlePageChange}
-                                                /> */}
+                                                />
                                             </h3>
                                         </div>
                                     </div>

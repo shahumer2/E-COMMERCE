@@ -75,6 +75,9 @@ const AddProduct = () => {
                             status: "AVAILABLE",
                             categoryIds: [],
                             brandId: 0,
+                            slug:"",
+                            metaTitle:"",
+                            metaDescription:"",
                             skus: [{
                                 sku: "",
                                 price: 0,
@@ -159,6 +162,41 @@ const AddProduct = () => {
                                                     <option value="UNAVAILABLE">UNAVAILABLE</option>
                                                 </Field>
                                                 <ErrorMessage name="product.status" component="div" className="text-red-500" />
+                                            </div>
+
+                                            {/* slug */}
+                                            <div className="flex-1 min-w-[300px]">
+                                                <label className="mb-2.5 block text-black dark:text-white">Slug</label>
+                                                <Field
+                                                    type="text"
+                                                    name="slug"
+                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                />
+                                                <ErrorMessage name="product.basePrice" component="div" className="text-red-500" />
+                                            </div>
+                                        </div>
+
+{/* meta Title meta description */}
+                                        <div className="mb-4.5 flex flex-wrap gap-6">
+                                        <div className="flex-1 min-w-[300px]">
+                                                <label className="mb-2.5 block text-black dark:text-white">Meta Title</label>
+                                                <Field
+                                                    type="text"
+                                                    name="metaTitle"
+                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                />
+                                                <ErrorMessage name="product.basePrice" component="div" className="text-red-500" />
+                                            </div>
+
+                                            {/* metaDescription */}
+                                            <div className="flex-1 min-w-[300px]">
+                                                <label className="mb-2.5 block text-black dark:text-white">Meta Description</label>
+                                                <Field
+                                                    type="text"
+                                                    name="metaDescription"
+                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                />
+                                                <ErrorMessage name="product.basePrice" component="div" className="text-red-500" />
                                             </div>
                                         </div>
 

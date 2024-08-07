@@ -6,7 +6,7 @@ import { ADD_Size_URL, GET_Size_URL, UPDATE_Size_URL, DELETE_Size_URL } from "..
 const useSize = (searchValue) => {
     const { currentUser } = useSelector((state) => state?.persisted?.user);
     const { token } = currentUser;
-    const [Size, setSize] = useState([]);
+    const [Sizes, setSizes] = useState([]);
     const [edit, setEdit] = useState(false);
     const [currentSize, setCurrentSize] = useState({ value: '' });
 console.log(token,"hey token");
@@ -25,18 +25,18 @@ console.log(token,"hey token");
 
     const getSize = async (page, searchValue) => {
         try {
-            console.log(`Sending request to fetch Size with search value: ${searchValue}`);
+           
             const response = await fetch(`${GET_Size_URL}`, {
-                method: "POST",
+                method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify({ name: searchValue })
+                // body: JSON.stringify({ name: searchValue })
             });
             const data = await response.json();
             console.log('Received Size data:', data);
-            setSize(data.content);
+            setSizes(data.content);
             setPagination({
                 totalItems: data.totalElements,
                 pagSizeList: data.content,
@@ -53,7 +53,7 @@ console.log(token,"hey token");
     const handleDelete = async (e, id) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${DELETE_Size_URL}${id}`, {
+            const response = await fetch(`${DELETE_Size_URL}/${id}`, {
                 method: 'DELETE',
                 headers: {
                     "Content-Type": "application/json",
@@ -129,7 +129,7 @@ console.log(token,"hey token");
     };
 
     return {
-        Size,
+        Sizes,
         edit,
         currentSize,
         pagination,

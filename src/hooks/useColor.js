@@ -6,7 +6,7 @@ import { ADD_Color_URL, GET_Color_URL, UPDATE_Color_URL, DELETE_Color_URL } from
 const useColor = (searchValue) => {
     const { currentUser } = useSelector((state) => state?.persisted?.user);
     const { token } = currentUser;
-    const [Color, setColor] = useState([]);
+    const [Colors, setColors] = useState([]);
     const [edit, setEdit] = useState(false);
     const [currentColor, setCurrentColor] = useState({ name: '' });
 
@@ -25,18 +25,18 @@ const useColor = (searchValue) => {
 
     const getColor = async (page, searchValue) => {
         try {
-            console.log(`Sending request to fetch Color with search value: ${searchValue}`);
+         
             const response = await fetch(`${GET_Color_URL}`, {
-                method: "POST",
+                method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify({ name: searchValue })
+                // body: JSON.stringify({ name: searchValue })
             });
             const data = await response.json();
             console.log('Received Color data:', data);
-            setColor(data.content);
+            setColors(data.content);
             setPagination({
                 totalItems: data.totalElements,
                 pagColorList: data.content,
@@ -53,7 +53,7 @@ const useColor = (searchValue) => {
     const handleDelete = async (e, id) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${DELETE_Color_URL}${id}`, {
+            const response = await fetch(`${DELETE_Color_URL}/${id}`, {
                 method: 'DELETE',
                 headers: {
                     "Content-Type": "application/json",
@@ -129,7 +129,7 @@ const useColor = (searchValue) => {
     };
 
     return {
-        Color,
+        Colors,
         edit,
         currentColor,
         pagination,

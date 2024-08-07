@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-
+import Pagination from '../../Pagination/Pagination';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import ViewTable from './ViewTable';
 
@@ -26,7 +26,7 @@ const Weight = () => {
         Weights,
         edit,
         currentWeight,
-        // pagination,
+        pagination,
         handleDelete,
         handleUpdate,
         handleSubmit,
@@ -94,14 +94,14 @@ const Weight = () => {
                                                     />
                                                     <button type="button" className="w-[80px] h-12 rounded-lg bg-blue-700 text-white dark:bg-blue-600 dark:text-slate-300 ml-4" onClick={handleSearch}>Search</button>
                                                 </div> */}
-                                                <ViewTable Weights={Weights} searchvalue={searchvalue}  title={'Weight'} handleDelete={handleDelete} handleUpdate={handleUpdate} />
+                                              
 
-                                                {/* <ViewTable Weights={Weights} searchvalue={searchvalue} pagination={pagination} totalItems={pagination.totalItems} title={'Weight'} handleDelete={handleDelete} handleUpdate={handleUpdate} /> */}
-                                                {/* <Pagination
+                                                <ViewTable units={Weights} searchvalue={searchvalue} pagination={pagination} totalItems={pagination.totalItems} title={'Unit'} handleDelete={handleDelete} handleUpdate={handleUpdate} />
+                                                <Pagination
                                                     totalPages={pagination.totalPages}
                                                     currentPage={pagination.currentPage}
                                                     handlePageChange={handlePageChange}
-                                                /> */}
+                                                />
                                             </h3>
                                         </div>
                                     </div>

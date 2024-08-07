@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { ADD_PRODUCT_URL } from "../Constants/utils";
+import { ADD_PRODUCT_URL } from "../constants/utils"
 import { useNavigate } from 'react-router-dom';
 
 const useProduct = () => {

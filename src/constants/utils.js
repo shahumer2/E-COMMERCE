@@ -80,10 +80,10 @@ export const GET_Weight_URL = `${BASE_URL}/api/weights`
 
 //brand
 
-export const ADD_Brand_URL = `${BASE_URL}/api/brand`
-export const DELETE_Brand_URL = `${BASE_URL}/api/brand`
-export const UPDATE_Brand_URL = `${BASE_URL}/api/brand`
-export const GET_Brand_URL = `${BASE_URL}/api/brand`
+export const ADD_Brand_URL = `${BASE_URL}/api/brands`
+export const DELETE_Brand_URL = `${BASE_URL}/api/brands`
+export const UPDATE_Brand_URL = `${BASE_URL}/api/brands`
+export const GET_Brand_URL = `${BASE_URL}/api/brands`
 
 
 

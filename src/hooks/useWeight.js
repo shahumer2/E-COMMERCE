@@ -6,7 +6,7 @@ import { ADD_Weight_URL, GET_Weight_URL, UPDATE_Weight_URL, DELETE_Weight_URL } 
 const useWeight = (searchValue) => {
     const { currentUser } = useSelector((state) => state?.persisted?.user);
     const { token } = currentUser;
-    const [Weight, setWeight] = useState([]);
+    const [Weights, setWeights] = useState([]);
     const [edit, setEdit] = useState(false);
     const [currentWeight, setCurrentWeight] = useState({ value: '' });
 console.log(token,"hey token");
@@ -25,18 +25,18 @@ console.log(token,"hey token");
 
     const getWeight = async (page, searchValue) => {
         try {
-            console.log(`Sending request to fetch Weight with search value: ${searchValue}`);
+          
             const response = await fetch(`${GET_Weight_URL}`, {
-                method: "POST",
+                method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify({ name: searchValue })
+                // body: JSON.stringify({ name: searchValue })
             });
             const data = await response.json();
             console.log('Received Weight data:', data);
-            setWeight(data.content);
+            setWeights(data.content);
             setPagination({
                 totalItems: data.totalElements,
                 pagWeightList: data.content,
@@ -53,7 +53,7 @@ console.log(token,"hey token");
     const handleDelete = async (e, id) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${DELETE_Weight_URL}${id}`, {
+            const response = await fetch(`${DELETE_Weight_URL}/${id}`, {
                 method: 'DELETE',
                 headers: {
                     "Content-Type": "application/json",
@@ -129,7 +129,7 @@ console.log(token,"hey token");
     };
 
     return {
-        Weight,
+        Weights,
         edit,
         currentWeight,
         pagination,

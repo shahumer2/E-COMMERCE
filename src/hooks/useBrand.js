@@ -6,9 +6,9 @@ import { ADD_Brand_URL, GET_Brand_URL, UPDATE_Brand_URL, DELETE_Brand_URL } from
 const useBrand = (searchValue) => {
     const { currentUser } = useSelector((state) => state?.persisted?.user);
     const { token } = currentUser;
-    const [Brand, setBrand] = useState([]);
+    const [Brands, setBrands] = useState([]);
     const [edit, setEdit] = useState(false);
-    const [currentBrand, setCurrentBrand] = useState({ name: '' });
+    const [currentBrand, setCurrentBrand] = useState({ name: '',slug:"" });
 
     const [pagination, setPagination] = useState({
         totalItems: 0,
@@ -25,18 +25,18 @@ const useBrand = (searchValue) => {
 
     const getBrand = async (page, searchValue) => {
         try {
-            console.log(`Sending request to fetch Brand with search value: ${searchValue}`);
+            // console.log(`Sending request to fetch Brand with search value: ${searchValue}`);
             const response = await fetch(`${GET_Brand_URL}`, {
-                method: "POST",
+                method: "GET",
                 headers: {
-                    "Content-Type": "application/json",
+                    // "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify({ name: searchValue })
+                // body: JSON.stringify({ name: searchValue })
             });
             const data = await response.json();
             console.log('Received Brand data:', data);
-            setBrand(data.content);
+            setBrands(data.content);
             setPagination({
                 totalItems: data.totalElements,
                 pagBrandList: data.content,
@@ -53,7 +53,7 @@ const useBrand = (searchValue) => {
     const handleDelete = async (e, id) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${DELETE_Brand_URL}${id}`, {
+            const response = await fetch(`${DELETE_Brand_URL}/${id}`, {
                 method: 'DELETE',
                 headers: {
                     "Content-Type": "application/json",
@@ -129,7 +129,7 @@ const useBrand = (searchValue) => {
     };
 
     return {
-        Brand,
+        Brands,
         edit,
         currentBrand,
         pagination,

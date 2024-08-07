@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import ViewTable from './ViewTable';
-
+import Pagination from '../../Pagination/Pagination';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -26,7 +26,7 @@ const Brand = () => {
         Brands,
         edit,
         currentBrand,
-        // pagination,
+        pagination,
         handleDelete,
         handleUpdate,
         handleSubmit,
@@ -74,6 +74,16 @@ const Brand = () => {
                                                 />
                                                 <ErrorMessage name="name" component="div" className="text-red-500" />
                                             </div>
+                                            <div className="flex-1 min-w-[300px]">
+                                                <label className="mb-2.5 block text-black dark:text-white">Slug</label>
+                                                <Field
+                                                    type="text"
+                                                    name="slug"
+                                                    placeholder="Enter Slug"
+                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-slate-700 dark:text-white dark:focus:border-primary"
+                                                />
+                                                <ErrorMessage name="name" component="div" className="text-red-500" />
+                                            </div>
                                         </div>
                                         <button type="submit" className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90 mt-4" disabled={isSubmitting}>
                                             {edit ? 'Update Brand' : 'Create Brand'}
@@ -94,14 +104,14 @@ const Brand = () => {
                                                     />
                                                     <button type="button" className="w-[80px] h-12 rounded-lg bg-blue-700 text-white dark:bg-blue-600 dark:text-slate-300 ml-4" onClick={handleSearch}>Search</button>
                                                 </div>
-                                                <ViewTable Brands={Brands} searchvalue={searchvalue}  title={'Brand'} handleDelete={handleDelete} handleUpdate={handleUpdate} />
+                                                <ViewTable units={Brands} searchvalue={searchvalue} pagination={pagination} totalItems={pagination.totalItems} title={'Unit'} handleDelete={handleDelete} handleUpdate={handleUpdate} />
 
-                                                {/* <ViewTable Brands={Brands} searchvalue={searchvalue} pagination={pagination} totalItems={pagination.totalItems} title={'Brand'} handleDelete={handleDelete} handleUpdate={handleUpdate} /> */}
-                                                {/* <Pagination
+                                            
+                                                <Pagination
                                                     totalPages={pagination.totalPages}
                                                     currentPage={pagination.currentPage}
                                                     handlePageChange={handlePageChange}
-                                                /> */}
+                                                />
                                             </h3>
                                         </div>
                                     </div>
