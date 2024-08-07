@@ -96,7 +96,7 @@ const Size = () => {
                                                 </div> */}
                                               
 
-                                                <ViewTable units={Sizes} searchvalue={searchvalue} pagination={pagination} totalItems={pagination.totalItems} title={'Unit'} handleDelete={handleDelete} handleUpdate={handleUpdate} />
+                                                <ViewTable units={Sizes} searchvalue={searchvalue} pagination={pagination} totalItems={pagination.totalItems} title={'Size'} handleDelete={handleDelete} handleUpdate={handleUpdate} />
                                                 <Pagination
                                                     totalPages={pagination.totalPages}
                                                     currentPage={pagination.currentPage}

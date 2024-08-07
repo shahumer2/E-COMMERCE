@@ -96,7 +96,7 @@ const Weight = () => {
                                                 </div> */}
                                               
 
-                                                <ViewTable units={Weights} searchvalue={searchvalue} pagination={pagination} totalItems={pagination.totalItems} title={'Unit'} handleDelete={handleDelete} handleUpdate={handleUpdate} />
+                                                <ViewTable units={Weights} searchvalue={searchvalue} pagination={pagination} totalItems={pagination.totalItems} title={'Weight'} handleDelete={handleDelete} handleUpdate={handleUpdate} />
                                                 <Pagination
                                                     totalPages={pagination.totalPages}
                                                     currentPage={pagination.currentPage}

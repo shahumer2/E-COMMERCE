@@ -125,7 +125,7 @@ const Category = () => {
                                                     />
                                                     <button type="button" className="w-[80px] h-12 rounded-lg bg-blue-700 text-white dark:bg-blue-600 dark:text-slate-300 ml-4" onClick={handleSearch}>Search</button>
                                                 </div>
-                                                <ViewTable units={Category} searchvalue={searchvalue} pagination={pagination} totalItems={pagination.totalItems} title={'Unit'} handleDelete={handleDelete} handleUpdate={handleUpdate} />
+                                                <ViewTable units={Category} searchvalue={searchvalue} pagination={pagination} totalItems={pagination.totalItems} title={'Category'} handleDelete={handleDelete} handleUpdate={handleUpdate} />
                                                 <Pagination
                                                     totalPages={pagination.totalPages}
                                                     currentPage={pagination.currentPage}

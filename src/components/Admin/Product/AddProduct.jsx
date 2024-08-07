@@ -42,7 +42,7 @@ const AddProduct = () => {
 
     useEffect(() => {
         if (category.data) {
-            const formattedOptions = category.data.map(category => ({
+            const formattedOptions = category.data.content.map(category => ({
                 value: category.id,
                 label: category.name,
             }));
@@ -222,10 +222,16 @@ const AddProduct = () => {
                                         <div className="mb-4.5 flex flex-wrap gap-6">
                                             <div className="flex-1 min-w-[300px]">
                                                 <label className="mb-2.5 block text-black dark:text-white">Brand</label>
-                                                <Field
-                                                    type="number"
+                                              
+                                                <ReactSelect
+                                                    isMulti
                                                     name="product.brandId"
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                    options={categories}
+                                                    classNamePrefix="react-select"
+                                                    styles={createCustomStyles(theme)}
+                                                    onChange={(selectedOptions) =>
+                                                        setFieldValue('product.categoryIds', selectedOptions.map(option => option.value))
+                                                    }
                                                 />
                                                 <ErrorMessage name="product.brandId" component="div" className="text-red-500" />
                                             </div>
