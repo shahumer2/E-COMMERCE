@@ -105,7 +105,7 @@ export const UPDATE_STOCK_URL = `${BASE_URL}/stockjournal`
 export const DELETE_STOCK_URL = `${BASE_URL}/stockjournal/delete`
 
 //PRODUCTS
-export const ADD_PRODUCT_URL = `${BASE_URL}/products`
+export const ADD_PRODUCT_URL = `${BASE_URL}/api/products`
 
 
 export const options = {

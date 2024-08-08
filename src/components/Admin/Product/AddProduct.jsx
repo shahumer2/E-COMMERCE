@@ -95,7 +95,7 @@ const AddProduct = () => {
         }
     }, [brand.data, category.data, weight.data, color.data, size.data]);
 
-console.log(weight,"klklklkl");
+    console.log(weight, "klklklkl");
     const { handleSubmit } = useProduct();
     const [imagePreviews, setImagePreviews] = useState([]);
 
@@ -104,8 +104,9 @@ console.log(weight,"klklklkl");
         const fileArray = Array.from(files);
         const previews = fileArray.map(file => URL.createObjectURL(file));
 
+        console.log(fileArray, 'ghghghghghghgh');
+        setFieldValue("images", fileArray);
         setImagePreviews(previews);
-        setFieldValue("product.images", fileArray);
     };
 
     return (
@@ -114,40 +115,43 @@ console.log(weight,"klklklkl");
             <div>
                 <Formik
                     initialValues={{
-                        product: {
-                            name: "",
-                            description: "",
-                            basePrice: 0,
-                            status: "AVAILABLE",
-                            categoryIds: [],
-                            brandId: 0,
-                            slug: "",
-                            metaTitle: "",
-                            metaDescription: "",
-                            skus: [{
+
+                        name: "",
+                        slug: "",
+                        description: "",
+                        basePrice: 0,
+                        status: "AVAILABLE",
+                        metaTitle: "",
+                        metaDescription: "",
+                        isFeatured: false,
+                        categories: [1],  // Array as expected
+                        brandId: 0,       // Single value
+                        attributes: [{ name: "", value: "" }],
+                        skus: [
+                            {
                                 sku: "",
                                 price: 0,
-                                quantity: 0,
-                                weight: 0,
-                                colorId: 0,
-                                attributes: [{ name: "", value: "" }],
+                                colorId: 1, // Single value
                                 sizes: [{ sizeId: 0, quantity: 0 }],
-                                weights: [{ weightId: 0, quantity: 0 }]
-                            }],
-                            images: []
-                        }
+                                weights: [{ weightId: 0, quantity: 0 }],
+                                attributes: [{ name: "", value: "" }]
+                            }
+                        ],
+                        images: []
+
                     }}
                     validationSchema={Yup.object({
-                        product: Yup.object({
-                            name: Yup.string().required('Required'),
-                            description: Yup.string().required('Required'),
-                            basePrice: Yup.number().required('Required').positive(),
-                            categoryIds: Yup.array().of(Yup.number().required('Required')).min(1, 'Select at least one category'),
-                            brandId: Yup.number().required('Required'),
 
-                        })
+                        name: Yup.string().required('Required'),
+                        description: Yup.string().required('Required'),
+                        basePrice: Yup.number().required('Required').positive(),
+                        // categories: Yup.array().of(Yup.number().required('Required')).min(1, 'Select at least one category'),
+
+
+
                     })}
                     onSubmit={(values, actions) => {
+                        console.log(values, "jigs");
                         handleSubmit(values);
                         actions.setSubmitting(false);
                     }}
@@ -169,30 +173,30 @@ console.log(weight,"klklklkl");
                                                 <label className="mb-2.5 block text-black dark:text-white">Product Name</label>
                                                 <Field
                                                     type="text"
-                                                    name="product.name"
+                                                    name="name"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 />
-                                                <ErrorMessage name="product.name" component="div" className="text-red-500" />
+                                                <ErrorMessage name="name" component="div" className="text-red-500" />
                                             </div>
                                             <div className="flex-1 min-w-[300px]">
                                                 <label className="mb-2.5 block text-black dark:text-white">Base Price</label>
                                                 <Field
                                                     type="number"
-                                                    name="product.basePrice"
+                                                    name="basePrice"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 />
-                                                <ErrorMessage name="product.basePrice" component="div" className="text-red-500" />
+                                                <ErrorMessage name="basePrice" component="div" className="text-red-500" />
                                             </div>
                                         </div>
                                         <div className="flex-1 min-w-[300px]">
                                             <label className="mb-2.5 block text-black dark:text-white">Description</label>
                                             <Field
                                                 as="textarea"
-                                                rows={6}
-                                                name="product.description"
+                                                rows={4}
+                                                name="description"
                                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                             />
-                                            <ErrorMessage name="product.description" component="div" className="text-red-500" />
+                                            <ErrorMessage name=" description" component="div" className="text-red-500" />
                                         </div>
 
                                         {/* Status */}
@@ -201,13 +205,13 @@ console.log(weight,"klklklkl");
                                                 <label className="mb-2.5 block text-black dark:text-white">Status</label>
                                                 <Field
                                                     as="select"
-                                                    name="product.status"
+                                                    name="status"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 >
                                                     <option value="AVAILABLE">AVAILABLE</option>
                                                     <option value="UNAVAILABLE">UNAVAILABLE</option>
                                                 </Field>
-                                                <ErrorMessage name="product.status" component="div" className="text-red-500" />
+                                                <ErrorMessage name="status" component="div" className="text-red-500" />
                                             </div>
 
                                             {/* slug */}
@@ -218,7 +222,7 @@ console.log(weight,"klklklkl");
                                                     name="slug"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 />
-                                                <ErrorMessage name="product.basePrice" component="div" className="text-red-500" />
+                                                <ErrorMessage name="basePrice" component="div" className="text-red-500" />
                                             </div>
                                         </div>
 
@@ -231,7 +235,7 @@ console.log(weight,"klklklkl");
                                                     name="metaTitle"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 />
-                                                <ErrorMessage name="product.basePrice" component="div" className="text-red-500" />
+                                                <ErrorMessage name="basePrice" component="div" className="text-red-500" />
                                             </div>
 
                                             {/* metaDescription */}
@@ -242,7 +246,7 @@ console.log(weight,"klklklkl");
                                                     name="metaDescription"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 />
-                                                <ErrorMessage name="product.basePrice" component="div" className="text-red-500" />
+                                                <ErrorMessage name="basePrice" component="div" className="text-red-500" />
                                             </div>
                                         </div>
 
@@ -252,88 +256,142 @@ console.log(weight,"klklklkl");
                                                 <label className="mb-2.5 block text-black dark:text-white">Categories</label>
                                                 <ReactSelect
                                                     isMulti
-                                                    name="product.categoryIds"
+                                                    name="categories"
                                                     options={categories}
                                                     classNamePrefix="react-select"
                                                     styles={createCustomStyles(theme)}
                                                     onChange={(selectedOptions) =>
-                                                        setFieldValue('product.categoryIds', selectedOptions.map(option => option.value))
+                                                        setFieldValue('categories', selectedOptions.map(option => option.value))
                                                     }
                                                 />
-                                                <ErrorMessage name="product.categoryIds" component="div" className="text-red-500" />
+                                                <ErrorMessage name="categories" component="div" className="text-red-500" />
+                                            </div>
+                                            <div className="flex-1 min-w-[300px]">
+                                                <label className="mb-2.5 block text-black dark:text-white">Brand</label>
+
+                                                <ReactSelect
+
+                                                    name="brandId"
+                                                    options={brands}
+                                                    classNamePrefix="react-select"
+                                                    styles={createCustomStyles(theme)}
+                                                    onChange={(selectedOptions) => {
+                                                        console.log(selectedOptions, "selectttt");
+                                                        setFieldValue("brandId", selectedOptions?.value
+
+
+                                                        )
+
+
+                                                    }
+
+
+                                                    }
+                                                />
+                                                <ErrorMessage name="brandId" component="div" className="text-red-500" />
                                             </div>
                                         </div>
 
                                         {/* Brand ID */}
                                         <div className="mb-4.5 flex flex-wrap gap-6">
-                                            <div className="flex-1 min-w-[300px]">
-                                                <label className="mb-2.5 block text-black dark:text-white">Brand</label>
 
-                                                <ReactSelect
-                                                    isMulti
-                                                    name="product.brandId"
-                                                    options={brands}
-                                                    classNamePrefix="react-select"
-                                                    styles={createCustomStyles(theme)}
-                                                    onChange={(selectedOptions) =>
-                                                        setFieldValue('product.categoryIds', selectedOptions.map(option => option.value))
-                                                    }
-                                                />
-                                                <ErrorMessage name="product.brandId" component="div" className="text-red-500" />
-                                            </div>
+                                        </div>
+                                        <div className="mb-4.5 flex flex-wrap gap-6">
+                                            <FieldArray name="attributes">
+                                                {({ push, remove }) => (
+                                                    <div className="flex flex-col gap-4 mb-4.5">
+                                                        {values.attributes.map((attribute, attrIndex) => (
+                                                            <div key={attrIndex} className="flex flex-wrap gap-6">
+                                                                <div className="flex-1 min-w-[300px]">
+                                                                    <label className="mb-2.5 block text-black dark:text-white">Attribute Name</label>
+                                                                    <Field
+                                                                        type="text"
+                                                                        name={`attributes.${attrIndex}.name`}
+                                                                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                                    />
+                                                                </div>
+                                                                <div className="flex-1 min-w-[300px]">
+                                                                    <label className="mb-2.5 block text-black dark:text-white">Attribute Value</label>
+                                                                    <Field
+                                                                        type="text"
+                                                                        name={`attributes.${attrIndex}.value`}
+                                                                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                                    />
+                                                                </div>
+                                                                <div className="flex items-end mb-4.5">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="text-red-500"
+                                                                        onClick={() => remove(attrIndex)}
+                                                                    >
+                                                                        Remove
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                        <button
+                                                            type="button"
+                                                            className="text-blue-500"
+                                                            onClick={() => push({ name: "", value: "" })}
+                                                        >
+                                                            Add Attribute
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </FieldArray>
                                         </div>
 
                                         {/* SKU Fields */}
                                         <div className="mb-4.5 flex flex-wrap gap-6">
-                                            <FieldArray name="product.skus">
+                                            <FieldArray name="skus">
                                                 {({ push, remove }) => (
                                                     <div className="flex flex-col gap-4">
-                                                        {values.product.skus.map((sku, index) => (
+                                                        {values.skus.map((sku, index) => (
                                                             <div key={index} className="border p-4 rounded-md">
                                                                 <div className="flex flex-wrap gap-6 mb-4.5">
                                                                     <div className="flex-1 min-w-[300px]">
                                                                         <label className="mb-2.5 block text-black dark:text-white">SKU</label>
                                                                         <Field
                                                                             type="text"
-                                                                            name={`product.skus.${index}.sku`}
+                                                                            name={`skus.${index}.sku`}
                                                                             className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                                         />
-                                                                        <ErrorMessage name={`product.skus.${index}.sku`} component="div" className="text-red-500" />
+                                                                        <ErrorMessage name={`skus.${index}.sku`} component="div" className="text-red-500" />
                                                                     </div>
                                                                     <div className="flex-1 min-w-[300px]">
                                                                         <label className="mb-2.5 block text-black dark:text-white">Price</label>
                                                                         <Field
                                                                             type="number"
-                                                                            name={`product.skus.${index}.price`}
+                                                                            name={`skus.${index}.price`}
                                                                             className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                                         />
-                                                                        <ErrorMessage name={`product.skus.${index}.price`} component="div" className="text-red-500" />
+                                                                        <ErrorMessage name={`skus.${index}.price`} component="div" className="text-red-500" />
                                                                     </div>
                                                                 </div>
 
                                                                 {/* Attributes */}
-                                                                <FieldArray name={`product.skus.${index}.attributes`}>
+                                                                {/* <FieldArray name={` skus.${index}.attributes`}>
                                                                     {({ push: pushAttribute, remove: removeAttribute }) => (
                                                                         <div className="flex flex-col gap-4 mb-4.5">
-                                                                            {values.product.skus[index].attributes.map((attribute, attrIndex) => (
+                                                                            {values. skus[index].attributes.map((attribute, attrIndex) => (
                                                                                 <div key={attrIndex} className="flex flex-wrap gap-6">
                                                                                     <div className="flex-1 min-w-[300px]">
                                                                                         <label className="mb-2.5 block text-black dark:text-white">Attribute Name</label>
                                                                                         <Field
                                                                                             type="text"
-                                                                                            name={`product.skus.${index}.attributes.${attrIndex}.name`}
+                                                                                            name={`skus.${index}.attributes.${attrIndex}.name`}
                                                                                             className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                                                         />
-                                                                                        <ErrorMessage name={`product.skus.${index}.attributes.${attrIndex}.name`} component="div" className="text-red-500" />
+                                                                                        <ErrorMessage name={`skus.${index}.attributes.${attrIndex}.name`} component="div" className="text-red-500" />
                                                                                     </div>
                                                                                     <div className="flex-1 min-w-[300px]">
                                                                                         <label className="mb-2.5 block text-black dark:text-white">Attribute Value</label>
                                                                                         <Field
                                                                                             type="text"
-                                                                                            name={`product.skus.${index}.attributes.${attrIndex}.value`}
+                                                                                            name={`skus.${index}.attributes.${attrIndex}.value`}
                                                                                             className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                                                         />
-                                                                                        <ErrorMessage name={`product.skus.${index}.attributes.${attrIndex}.value`} component="div" className="text-red-500" />
+                                                                                        <ErrorMessage name={`skus.${index}.attributes.${attrIndex}.value`} component="div" className="text-red-500" />
                                                                                     </div>
                                                                                     <div className="flex items-end min-w-[50px]">
                                                                                         <button type="button" className="p-2.5 border rounded-md text-red-500" onClick={() => removeAttribute(attrIndex)}>
@@ -347,7 +405,7 @@ console.log(weight,"klklklkl");
                                                                             </button>
                                                                         </div>
                                                                     )}
-                                                                </FieldArray>
+                                                                </FieldArray> */}
 
                                                                 {/* Color ID */}
                                                                 <div className="mb-4.5 flex flex-wrap gap-6">
@@ -355,16 +413,16 @@ console.log(weight,"klklklkl");
                                                                         <label className="mb-2.5 block text-black dark:text-white">Color ID</label>
 
                                                                         <ReactSelect
-                                                                            isMulti
-                                                                            name={`product.skus.${index}.colorId`}
+                                                                          
+                                                                            name={`skus.${index}.colorId`}
                                                                             options={colors}
                                                                             classNamePrefix="react-select"
                                                                             styles={createCustomStyles(theme)}
                                                                             onChange={(selectedOptions) =>
-                                                                                setFieldValue('product.categoryIds', selectedOptions.map(option => option.value))
+                                                                                setFieldValue(`skus.${index}.colorId`,selectedOptions.value)
                                                                             }
                                                                         />
-                                                                        <ErrorMessage name={`product.skus.${index}.colorId`} component="div" className="text-red-500" />
+                                                                        <ErrorMessage name={`skus.${index}.colorId`} component="div" className="text-red-500" />
                                                                     </div>
                                                                 </div>
 
@@ -373,47 +431,48 @@ console.log(weight,"klklklkl");
                                                                     <label className="mb-2.5 block text-black dark:text-white">Select Size or Weight</label>
                                                                     <div className="flex items-center gap-4">
                                                                         <label className="flex items-center gap-2">
-                                                                            <Field type="checkbox" name={`product.skus.${index}.sizeSelected`} />
+                                                                            <Field type="checkbox" name={`skus.${index}.sizeSelected`} />
                                                                             Size
                                                                         </label>
                                                                         <label className="flex items-center gap-2">
-                                                                            <Field type="checkbox" name={`product.skus.${index}.weightSelected`} />
+                                                                            <Field type="checkbox" name={`skus.${index}.weightSelected`} />
                                                                             Weight
                                                                         </label>
                                                                     </div>
                                                                 </div>
 
                                                                 {/* Sizes or Weights Fields */}
-                                                                {values.product.skus[index].sizeSelected && (
-                                                                    <FieldArray name={`product.skus.${index}.sizes`}>
+                                                                {values.skus[index].sizeSelected && (
+                                                                    <FieldArray name={`skus.${index}.sizes`}>
                                                                         {({ push: pushSize, remove: removeSize }) => (
                                                                             <div className="flex flex-col gap-4 mb-4.5">
-                                                                                {values.product.skus[index].sizes.map((size, sizeIndex) => (
+                                                                                {values.skus[index].sizes.map((size, sizeIndex) => (
                                                                                     <div key={sizeIndex} className="flex flex-wrap gap-6">
                                                                                         <div className="flex-1 min-w-[300px]">
-                                                                                            <label className="mb-2.5 block text-black dark:text-white">Size ID</label>
+                                                                                            <label className="mb-2.5 block text-black dark:text-white">Size</label>
 
                                                                                             <ReactSelect
-
-                                                                                                name={`product.skus.${index}.sizes.${sizeIndex}.sizeId`}
+                                                                                               
+                                                                                                name={`skus.${index}.sizes.${sizeIndex}.sizeId`}
                                                                                                 options={sizes}
                                                                                                 classNamePrefix="react-select"
                                                                                                 styles={createCustomStyles(theme)}
                                                                                                 onChange={(selectedOptions) =>
-                                                                                                    setFieldValue('product.categoryIds', selectedOptions.map(option => option.value))
+                                                                                                    setFieldValue(`skus.${index}.sizes.${sizeIndex}.sizeId`,selectedOptions.value)
                                                                                                 }
+                                                                                                value={sizes.filter(size => values.skus[index].sizes.map(s => s.sizeId).includes(size.value))}
                                                                                             />
-                                                                                            <ErrorMessage name={`product.skus.${index}.sizes.${sizeIndex}.sizeId`} component="div" className="text-red-500" />
+                                                                                            <ErrorMessage name={`skus.${index}.sizes.${sizeIndex}.sizeId`} component="div" className="text-red-500" />
                                                                                         </div>
                                                                                         <div className="flex-1 min-w-[300px]">
                                                                                             <label className="mb-2.5 block text-black dark:text-white">Quantity</label>
                                                                                             <Field
                                                                                                 type="number"
-                                                                                                name={`product.skus.${index}.sizes.${sizeIndex}.quantity`}
+                                                                                                name={`skus.${index}.sizes.${sizeIndex}.quantity`}
                                                                                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                                                             />
 
-                                                                                            <ErrorMessage name={`product.skus.${index}.sizes.${sizeIndex}.quantity`} component="div" className="text-red-500" />
+                                                                                            <ErrorMessage name={`skus.${index}.sizes.${sizeIndex}.quantity`} component="div" className="text-red-500" />
                                                                                         </div>
                                                                                         <div className="flex items-end min-w-[50px]">
                                                                                             <button type="button" className="p-2.5 border rounded-md text-red-500" onClick={() => removeSize(sizeIndex)}>
@@ -430,38 +489,39 @@ console.log(weight,"klklklkl");
                                                                     </FieldArray>
                                                                 )}
 
-                                                                {values.product.skus[index].weightSelected && (
-                                                                    <FieldArray name={`product.skus.${index}.weights`}>
+                                                                {values.skus[index].weightSelected && (
+                                                                    <FieldArray name={`skus.${index}.weights`}>
                                                                         {({ push: pushWeight, remove: removeWeight }) => (
                                                                             <div className="flex flex-col gap-4 mb-4.5">
-                                                                                {values.product.skus[index].weights.map((weight, weightIndex) => (
+                                                                                {values.skus[index].weights.map((weight, weightIndex) => (
                                                                                     <div key={weightIndex} className="flex flex-wrap gap-6">
                                                                                         <div className="flex-1 min-w-[300px]">
-                                                                                            <label className="mb-2.5 block text-black dark:text-white">Weight ID</label>
+                                                                                            <label className="mb-2.5 block text-black dark:text-white">Weight</label>
 
                                                                                             <ReactSelect
+                                                                                                isMulti
 
-                                                                                                name={`product.skus.${index}.weights.${weightIndex}.weightId`}
+                                                                                                name={`skus.${index}.weights.${weightIndex}.weightId`}
                                                                                                 options={weights}
                                                                                                 classNamePrefix="react-select"
                                                                                                 styles={createCustomStyles(theme)}
                                                                                                 onChange={(selectedOptions) =>
-                                                                                                    setFieldValue('product.categoryIds', selectedOptions.map(option => option.value))
+                                                                                                    setFieldValue(`skus.${index}.weights.${weightIndex}.weightId`, selectedOptions.value)
                                                                                                 }
                                                                                             />
 
-                                                                                            <ErrorMessage name={`product.skus.${index}.weights.${weightIndex}.weightId`} component="div" className="text-red-500" />
+                                                                                            <ErrorMessage name={`skus.${index}.weights.${weightIndex}.weightId`} component="div" className="text-red-500" />
                                                                                         </div>
                                                                                         <div className="flex-1 min-w-[300px]">
                                                                                             <label className="mb-2.5 block text-black dark:text-white">Quantity</label>
                                                                                             <Field
                                                                                                 type="number"
-                                                                                                name={`product.skus.${index}.weights.${weightIndex}.quantity`}
+                                                                                                name={`skus.${index}.weights.${weightIndex}.quantity`}
                                                                                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                                                             />
 
 
-                                                                                            <ErrorMessage name={`product.skus.${index}.weights.${weightIndex}.quantity`} component="div" className="text-red-500" />
+                                                                                            <ErrorMessage name={`skus.${index}.weights.${weightIndex}.quantity`} component="div" className="text-red-500" />
                                                                                         </div>
                                                                                         <div className="flex items-end min-w-[50px]">
                                                                                             <button type="button" className="p-2.5 border rounded-md text-red-500" onClick={() => removeWeight(weightIndex)}>
@@ -489,6 +549,7 @@ console.log(weight,"klklklkl");
                                                             <div className="flex-1 min-w-[300px]">
                                                                 <label className="mb-2.5 block text-black dark:text-white">Images</label>
                                                                 <input
+                                                                    name='images'
                                                                     type="file"
                                                                     multiple
                                                                     accept="image/*"

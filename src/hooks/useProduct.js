@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const useProduct = () => {
     console.log("i got here");
+
     // const navigate = useNavigate();
     // const [rows, setRows] = useState([{ id: Date.now(), selectedOption1: null, selectedOption2: null, selectedOption3: [], numOfLooms: 0 }]);
     const { currentUser } = useSelector((state) => state?.persisted?.user);
@@ -132,42 +133,32 @@ const useProduct = () => {
             const url = ADD_PRODUCT_URL;
             const method = "POST";
     
-            const formData = new FormData();
-         
-            formData.append('name', values.product.name);
-            formData.append('description', values.product.description);
-            formData.append('price', values.product.price);
-            formData.append('status', values.product.status);
-    
             // Handle sizes
-            if (values.product.sizes.length > 0) {
-                values.product.sizes.forEach((size, index) => {
-                    formData.append(`sizes[${index}][size]`, size.size);
-                    formData.append(`sizes[${index}][quantity]`, size.quantity);
-                });
-            }
+            // if (values.sizes.length > 0) {
+            //     values.sizes.forEach((size,index) => {
+            //         formData.append(`sizes[${index}][size]`,size.size);
+            //         formData.append(`sizes[${index}][quantity]`,size.quantity);
+            //     });
+            // }
     
-            // Handle weights
-            if (values.product.weights.length > 0) {
-                values.product.weights.forEach((weight, index) => {
-                    formData.append(`weights[${index}][weight]`, weight.weight);
-                    formData.append(`weights[${index}][quantity]`, weight.quantity);
-                });
-            }
+            // // Handle weights
+            // if (values.weights.length > 0) {
+            //     values.weights.forEach((weight, index) => {
+            //         formData.append(`weights[${index}][weight]`,weight.weight);
+            //         formData.append(`weights[${index}][quantity]`,weight.quantity);
+            //     });
+            // }
     
             // Handle images
-            if (values.product.images.length > 0) {
-                values.product.images.forEach((file) => {
-                    formData.append('images', file);
-                });
-            }
+          
     
             const response = await fetch(url, {
                 method: method,
                 headers: {
+                    // "content-type":"multipart/form-data",
                     "Authorization": `Bearer ${token}`
                 },
-                body: formData
+                body:values
             });
     
             const data = await response.json();
@@ -182,6 +173,92 @@ const useProduct = () => {
             toast.error("An error occurred");
         }
     };
+
+    // const handleSubmit = async (values) => {
+    //     console.log(values, "jammu");
+    //     try {
+    //         const url = ADD_PRODUCT_URL;
+    //         const method = "POST";
+    
+    //         const formData = new FormData();
+    
+    //         // Append basic fields
+    //         formData.append('name', values.name);
+    //         formData.append('slug', values.slug);
+    //         formData.append('description', values.description);
+    //         formData.append('basePrice', values.basePrice);
+    //         formData.append('status', values.status);
+    //         formData.append('metaTitle', values.metaTitle);
+    //         formData.append('metaDescription', values.metaDescription);
+    //         formData.append('isFeatured', values.isFeatured);
+    
+    //         // Handle categories (array to JSON)
+    //         values.categories.forEach((category, index) => {
+    //             formData.append(`categories[${index}]`, category);
+    //         });
+    
+    //         formData.append('brandId', values.brandId);
+    
+    //         // Handle attributes
+    //         values.attributes.forEach((attr, index) => {
+    //             formData.append(`attributes[${index}][name]`, attr.name);
+    //             formData.append(`attributes[${index}][value]`, attr.value);
+    //         });
+    
+    //         // Handle SKUs
+    //         values.skus.forEach((sku, index) => {
+    //             formData.append(`skus[${index}][sku]`, sku.sku);
+    //             formData.append(`skus[${index}][price]`, sku.price);
+    //             formData.append(`skus[${index}][colorId]`, sku.colorId);
+    
+    //             if (sku.sizeSelected) {
+    //                 sku.sizes.forEach((size, sizeIndex) => {
+    //                     formData.append(`skus[${index}][sizes][${sizeIndex}][sizeId]`, size.sizeId);
+    //                     formData.append(`skus[${index}][sizes][${sizeIndex}][quantity]`, size.quantity);
+    //                 });
+    //             }
+    
+    //             if (sku.weightSelected) {
+    //                 sku.weights.forEach((weight, weightIndex) => {
+    //                     formData.append(`skus[${index}][weights][${weightIndex}][weightId]`, weight.weightId);
+    //                     formData.append(`skus[${index}][weights][${weightIndex}][quantity]`, weight.quantity);
+    //                 });
+    //             }
+    //         });
+    
+    //         // Handle images
+    //         values.images.forEach((file) => {
+    //             formData.append('images', file);
+    //         });
+    
+    //         console.log(formData, "jhjhjhjhjhhhhhhhhhh"); // Log FormData entries for debugging
+    
+    //         const response = await fetch(url, {
+    //             method: method,
+    //             headers: {
+    //                 "Authorization": `Bearer ${token}`,
+    //                 // Do not set Content-Type header for FormData; it is set automatically
+    //             },
+    //             body: formData, // Send FormData directly as the body
+    //         });
+    
+    //         const data = await response.json();
+    //         console.log(data, "japan");
+    //         if (response.ok) {
+    //             toast.success(`Product Added successfully`);
+    //         } else {
+    //             toast.error(`${data.errorMessage}`);
+    //         }
+    //     } catch (error) {
+    //         console.error(error);
+    //         toast.error("An error occurred");
+    //     }
+    // };
+    
+    
+    
+    
+    
     
 
     // const handleUpdateSubmit = async (values, { setSubmitting, resetForm }) => {
