@@ -97,60 +97,75 @@ const AddProduct = () => {
     }, [brand.data, category.data, weight.data, color.data, size.data]);
 
     console.log(weight, "klklklkl");
-    // const { handleSubmit } = useProduct();
-    const handleSubmit = async (values) => {
-        try {
-            const url = ADD_PRODUCT_URL;
-            const method = "POST";
+    const { handleSubmit } = useProduct();
+    // const handleSubmit = async (values) => {
+    //     try {
+    //         const url = ADD_PRODUCT_URL;
+    //         const method = "POST";
     
-            // Create FormData instance
-            const formData = new FormData();
+    //         // Create FormData instance
+    //         const formData = new FormData();
     
-            // Create the product object
-            const product = {};
+    //         // Create the product object
+    //         const product = {};
     
-            // Populate the product object with values excluding 'images'
-            Object.keys(values).forEach(key => {
-                if (key !== 'images') {
-                    product[key] = values[key];
-                }
-            });
+    //         // Populate the product object with values excluding 'images'
+    //         Object.keys(values).forEach(key => {
+    //             if (key !== 'images') {
+    //                 // Handle SKUs specifically
+    //                 if (key === 'skus') {
+    //                     product[key] = values[key].map(sku => {
+    //                         // If weight is not selected, remove the weights field
+    //                         if (!sku.weightSelected) {
+    //                             const { weights,sizeSelected, ...rest } = sku;
+    //                             return rest;
+    //                         }
+    //                         // If size is not selected, remove the sizes field
+    //                         if (!sku.sizeSelected) {
+    //                             const { sizes,sizeSelected, ...rest } = sku;
+    //                             return rest;
+    //                         }
+    //                         return sku;
+    //                     });
+    //                 } else {
+    //                     product[key] = values[key];
+    //                 }
+    //             }
+    //         });
     
-            // Append the product object to FormData as a JSON string
-            formData.append('product', JSON.stringify(product));
+    //         // Append the product object to FormData as a JSON string
+    //         formData.append('product', JSON.stringify(product));
     
-            // Append all images under a single 'images' key
-            values.images.forEach((file) => {
-                formData.append('images', file); // All images under the 'images' key
-            });
+    //         // Append images array to FormData
+    //         values.images.forEach((file) => {
+    //             formData.append('images', file);
+    //         });
     
-            // Log each key-value pair in FormData for debugging
-            for (let pair of formData.entries()) {
-                console.log(pair[0] + ':', pair[1],"lololo");
-            }
+    //         // Log each key-value pair in FormData
+    //         for (let pair of formData.entries()) {
+    //             console.log(pair[0] + ':', pair[1]);
+    //         }
     
-            const response = await fetch(url, {
-                method: method,
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    // Do not set the Content-Type header manually
-                },
-                body: formData, // Send FormData directly as the body
-            });
+    //         const response = await fetch(url, {
+    //             method: method,
+    //             headers: {
+    //                 "Authorization": `Bearer ${token}`,
+    //                 // Do not set the Content-Type header manually
+    //             },
+    //             body: formData, // Send FormData directly as the body
+    //         });
     
-            const data = await response.json();
-            if (response.ok) {
-                toast.success(`Product Added successfully`);
-            } else {
-                toast.error(`${data.errorMessage}`);
-            }
-        } catch (error) {
-            console.error(error);
-            toast.error("An error occurred");
-        }
-    };
-    
-    
+    //         const data = await response.json();
+    //         if (response.ok) {
+    //             toast.success(`Product Added successfully`);
+    //         } else {
+    //             toast.error(`${data.errorMessage}`);
+    //         }
+    //     } catch (error) {
+    //         console.error(error);
+    //         toast.error("An error occurred");
+    //     }
+    // };
     
     
     
@@ -430,7 +445,7 @@ const AddProduct = () => {
                                                                 </div>
 
                                                                 {/* Attributes */}
-                                                                {/* <FieldArray name={` skus.${index}.attributes`}>
+                                                                <FieldArray name={` skus.${index}.attributes`}>
                                                                     {({ push: pushAttribute, remove: removeAttribute }) => (
                                                                         <div className="flex flex-col gap-4 mb-4.5">
                                                                             {values. skus[index].attributes.map((attribute, attrIndex) => (
@@ -465,7 +480,7 @@ const AddProduct = () => {
                                                                             </button>
                                                                         </div>
                                                                     )}
-                                                                </FieldArray> */}
+                                                                </FieldArray>
 
                                                                 {/* Color ID */}
                                                                 <div className="mb-4.5 flex flex-wrap gap-6">
@@ -583,6 +598,8 @@ const AddProduct = () => {
 
                                                                                             <ErrorMessage name={`skus.${index}.weights.${weightIndex}.quantity`} component="div" className="text-red-500" />
                                                                                         </div>
+
+
                                                                                         <div className="flex items-end min-w-[50px]">
                                                                                             <button type="button" className="p-2.5 border rounded-md text-red-500" onClick={() => removeWeight(weightIndex)}>
                                                                                                 Remove
@@ -594,6 +611,12 @@ const AddProduct = () => {
                                                                                     <IoIosAdd size={24} />
                                                                                 </button>
                                                                             </div>
+
+
+
+
+
+
                                                                         )}
                                                                     </FieldArray>
                                                                 )}

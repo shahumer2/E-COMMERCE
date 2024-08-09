@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import useProduct from '../../hooks/useProduct';
 
 const ProductSection = () => {
     const [filter, setFilter] = useState('*');
@@ -6,6 +7,9 @@ const ProductSection = () => {
     const handleFilterClick = (filter) => {
         setFilter(filter);
     };
+
+    const {Product} = useProduct();
+    console.log(Product,'lolo');
 
     const products = [
         { id: 1, category: 'women', image: 'product-1.jpg', label: 'New', name: 'Buttons tweed blazer', price: 59.0, rating: 5 },

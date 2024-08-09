@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { ADD_PRODUCT_URL } from "../constants/utils"
+import { ADD_PRODUCT_URL, GET_PRODUCT_URL } from "../constants/utils"
+
+
 import { useNavigate } from 'react-router-dom';
 
 const useProduct = () => {
@@ -11,10 +13,10 @@ const useProduct = () => {
     // const [rows, setRows] = useState([{ id: Date.now(), selectedOption1: null, selectedOption2: null, selectedOption3: [], numOfLooms: 0 }]);
     const { currentUser } = useSelector((state) => state?.persisted?.user);
     const { token } = currentUser;
-    // const [Product, setProduct] = useState([]);
+    const [Product, setProduct] = useState([]);
     // const [edit, setEdit] = useState(false);
-    
-  
+
+
 
 
 
@@ -26,36 +28,36 @@ const useProduct = () => {
     //     itemsPerPage: 0
     // });
 
-    // useEffect(() => {
-    //     getProduct(pagination.currentPage || 1);
-    // }, []);
+    useEffect(() => {
+        getProduct();
+    }, []);
 
-    // const getProduct = async (page) => {
-    //     try {
-          
-    //         const response = await fetch(`${GET_Product_URL}?page=${page}`, {
-    //             method: "GET",
-    //             headers: {
-                    
-    //                 "Authorization": `Bearer ${token}`
-    //             }
-    //         });
-    //         const data = await response.json();
-           
-           
-    //         setProduct(data.content);
-    //         setPagination({
-    //             totalItems: data.totalElements,
-    //             data: data.content,
-    //             totalPages: data.totalPages,
-    //             currentPage: data.number+1 ,
-    //             itemsPerPage: data.size,
-    //         });
-    //     } catch (error) {
-    //         console.error(error);
-    //         toast.error("Failed to fetch Product");
-    //     }
-    // };
+    const getProduct = async (page) => {
+        try {
+
+            const response = await fetch(`${GET_PRODUCT_URL}`, {
+                method: "GET",
+                headers: {
+
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+
+console.log(data,"lililili");
+            setProduct(data.content);
+            setPagination({
+                totalItems: data.totalElements,
+                data: data.content,
+                totalPages: data.totalPages,
+                currentPage: data.number + 1,
+                itemsPerPage: data.size,
+            });
+        } catch (error) {
+            console.error(error);
+            toast.error("Failed to fetch Product");
+        }
+    };
 
     // const handleDelete = async (e, id) => {
     //     e.preventDefault();
@@ -116,53 +118,66 @@ const useProduct = () => {
     //     }
     // };
 
-    // const handleUpdate = (e, item) => {
-    //     console.log(item, "on update");
-    //     e.preventDefault();
-    //     setEdit(true);
-    //     if (item && item.id) {
-    //         navigate(`/Product/updateProduct/${item.id}`);
-    //     } else {
-    //         console.error("Item or its ID is missing");
-    //     }
-    // };
+
 
     const handleSubmit = async (values) => {
-        console.log(values, "jammu");
         try {
             const url = ADD_PRODUCT_URL;
             const method = "POST";
-    
-            // Handle sizes
-            // if (values.sizes.length > 0) {
-            //     values.sizes.forEach((size,index) => {
-            //         formData.append(`sizes[${index}][size]`,size.size);
-            //         formData.append(`sizes[${index}][quantity]`,size.quantity);
-            //     });
-            // }
-    
-            // // Handle weights
-            // if (values.weights.length > 0) {
-            //     values.weights.forEach((weight, index) => {
-            //         formData.append(`weights[${index}][weight]`,weight.weight);
-            //         formData.append(`weights[${index}][quantity]`,weight.quantity);
-            //     });
-            // }
-    
-            // Handle images
-          
-    
+
+            // Create FormData instance
+            const formData = new FormData();
+
+            // Create the product object
+            const product = {};
+
+            // Populate the product object with values excluding 'images'
+            Object.keys(values).forEach(key => {
+                if (key !== 'images') {
+                    // Handle SKUs specifically
+                    if (key === 'skus') {
+                        product[key] = values[key].map(sku => {
+                            // If weight is not selected, remove the weights field
+                            if (!sku.weightSelected) {
+                                const { weights, sizeSelected, ...rest } = sku;
+                                return rest;
+                            }
+                            // If size is not selected, remove the sizes field
+                            if (!sku.sizeSelected) {
+                                const { sizes, sizeSelected, ...rest } = sku;
+                                return rest;
+                            }
+                            return sku;
+                        });
+                    } else {
+                        product[key] = values[key];
+                    }
+                }
+            });
+
+            // Append the product object to FormData as a JSON string
+            formData.append('product', JSON.stringify(product));
+
+            // Append images array to FormData
+            values.images.forEach((file) => {
+                formData.append('images', file);
+            });
+
+            // Log each key-value pair in FormData
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ':', pair[1]);
+            }
+
             const response = await fetch(url, {
                 method: method,
                 headers: {
-                    "content-type":"application/json",
-                    "Authorization": `Bearer ${token}`
+                    "Authorization": `Bearer ${token}`,
+                    // Do not set the Content-Type header manually
                 },
-                body:values
+                body: formData, // Send FormData directly as the body
             });
-    
+
             const data = await response.json();
-            console.log(data, "japan");
             if (response.ok) {
                 toast.success(`Product Added successfully`);
             } else {
@@ -174,14 +189,15 @@ const useProduct = () => {
         }
     };
 
+
     // const handleSubmit = async (values) => {
     //     console.log(values, "jammu");
     //     try {
     //         const url = ADD_PRODUCT_URL;
     //         const method = "POST";
-    
+
     //         const formData = new FormData();
-    
+
     //         // Append basic fields
     //         formData.append('name', values.name);
     //         formData.append('slug', values.slug);
@@ -191,33 +207,33 @@ const useProduct = () => {
     //         formData.append('metaTitle', values.metaTitle);
     //         formData.append('metaDescription', values.metaDescription);
     //         formData.append('isFeatured', values.isFeatured);
-    
+
     //         // Handle categories (array to JSON)
     //         values.categories.forEach((category, index) => {
     //             formData.append(`categories[${index}]`, category);
     //         });
-    
+
     //         formData.append('brandId', values.brandId);
-    
+
     //         // Handle attributes
     //         values.attributes.forEach((attr, index) => {
     //             formData.append(`attributes[${index}][name]`, attr.name);
     //             formData.append(`attributes[${index}][value]`, attr.value);
     //         });
-    
+
     //         // Handle SKUs
     //         values.skus.forEach((sku, index) => {
     //             formData.append(`skus[${index}][sku]`, sku.sku);
     //             formData.append(`skus[${index}][price]`, sku.price);
     //             formData.append(`skus[${index}][colorId]`, sku.colorId);
-    
+
     //             if (sku.sizeSelected) {
     //                 sku.sizes.forEach((size, sizeIndex) => {
     //                     formData.append(`skus[${index}][sizes][${sizeIndex}][sizeId]`, size.sizeId);
     //                     formData.append(`skus[${index}][sizes][${sizeIndex}][quantity]`, size.quantity);
     //                 });
     //             }
-    
+
     //             if (sku.weightSelected) {
     //                 sku.weights.forEach((weight, weightIndex) => {
     //                     formData.append(`skus[${index}][weights][${weightIndex}][weightId]`, weight.weightId);
@@ -225,14 +241,14 @@ const useProduct = () => {
     //                 });
     //             }
     //         });
-    
+
     //         // Handle images
     //         values.images.forEach((file) => {
     //             formData.append('images', file);
     //         });
-    
+
     //         console.log(formData, "jhjhjhjhjhhhhhhhhhh"); // Log FormData entries for debugging
-    
+
     //         const response = await fetch(url, {
     //             method: method,
     //             headers: {
@@ -241,7 +257,7 @@ const useProduct = () => {
     //             },
     //             body: formData, // Send FormData directly as the body
     //         });
-    
+
     //         const data = await response.json();
     //         console.log(data, "japan");
     //         if (response.ok) {
@@ -254,12 +270,12 @@ const useProduct = () => {
     //         toast.error("An error occurred");
     //     }
     // };
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
 
     // const handleUpdateSubmit = async (values, { setSubmitting, resetForm }) => {
     //     try {
@@ -305,10 +321,12 @@ const useProduct = () => {
         // handleDelete,
         // handleUpdate,
         handleSubmit,
+        getProduct,
+        Product
         // handlePageChange,
         // seloptions,
         // groups,
-   
+
     };
 };
 
