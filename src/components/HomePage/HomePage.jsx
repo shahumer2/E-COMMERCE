@@ -14,7 +14,7 @@ import InstagramSection from './Instagram';
 const HomePage = () => {
     return (
         <div>
-            <Header />
+           
             <Categories />
             <ProductSection />
             <BannerSection/>
@@ -23,7 +23,7 @@ const HomePage = () => {
             <ServicesSection/>
             <InstagramSection/>
             {/* Add other sections/components here */}
-            <Footer />
+           
             <SearchModel />
         </div>
     );

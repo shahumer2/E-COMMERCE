@@ -80,7 +80,7 @@ const Header = () => {
                                     <li className="active"><a href="./index.html">Home</a></li>
                                     <li><a href="#">Women’s</a></li>
                                     <li><a href="#">Men’s</a></li>
-                                    <li><a href="./shop.html">Shop</a></li>
+                                    <li><a href="AllProducts">Shop</a></li>
                                     <li><a href="#">Pages</a>
                                         <ul className="dropdown">
                                             <li><a href="/Product/viewbyid">Product Details</a></li>

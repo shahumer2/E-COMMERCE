@@ -20,13 +20,13 @@ const useProduct = () => {
 
 
 
-    // const [pagination, setPagination] = useState({
-    //     totalItems: 0,
-    //     data: [],
-    //     totalPages: 0,
-    //     currentPage: 1,
-    //     itemsPerPage: 0
-    // });
+    const [pagination, setPagination] = useState({
+        totalItems: 0,
+        data: [],
+        totalPages: 0,
+        currentPage: 1,
+        itemsPerPage: 0
+    });
 
     useEffect(() => {
         getProduct();

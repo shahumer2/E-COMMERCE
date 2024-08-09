@@ -5,34 +5,24 @@ import Loader from './common/Loader/index.js';
 import PageTitle from './components/PageTitle.js';
 import SignIn from './pages/Authentication/SignIn.jsx';
 import SignUp from './pages/Authentication/SignUp.jsx';
-
 import Chart from './pages/Chart.js';
-
 import Settings from './pages/Settings.js';
 import Tables from './pages/Tables.js';
 import Alerts from './pages/UiElements/Alerts.js';
 import Buttons from './pages/UiElements/Buttons.js';
 import PrivateRoute from './PrivateRoute/PrivateRoute.jsx';
-
-
-
 import AddProduct from './components/Admin/Product/AddProduct.jsx';
-
-
-
 import HomePage from './components/HomePage/HomePage.jsx';
-
 import ShopCart from './components/HomePage/Cart.jsx';
 import Checkout from './components/HomePage/Checkout.jsx';
-
-import Category from "./components/Admin/Configurator/Category.jsx"
-
-import Color from "./components/Admin/Configurator/Color.jsx"
-import Size from "./components/Admin/Configurator/Size.jsx"
-import Brand from "./components/Admin/Configurator/Brand.jsx"
-import Weight from "./components/Admin/Configurator/Weight.jsx"
-
-
+import Category from "./components/Admin/Configurator/Category.jsx";
+import Color from "./components/Admin/Configurator/Color.jsx";
+import Size from "./components/Admin/Configurator/Size.jsx";
+import Brand from "./components/Admin/Configurator/Brand.jsx";
+import Weight from "./components/Admin/Configurator/Weight.jsx";
+import AllProduct from './components/HomePage/AllProducts.jsx';
+import Header from './components/HomePage/Header';  // Import your Header component
+import Footer from './components/HomePage/Footer';  // Import your Footer component
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -45,14 +35,18 @@ function App() {
   }, [pathname]);
 
   useEffect(() => {
-
     setTimeout(() => setLoading(false), 1000);
   }, []);
+
+  const renderHeaderFooter = () => {
+    return !['/auth/signin', '/auth/signup'].includes(pathname) && !pathname.startsWith('/private');
+  };
 
   return loading ? (
     <Loader />
   ) : (
     <>
+      {renderHeaderFooter() && <Header />}
       <Routes>
         <Route
           path="/auth/signin"
@@ -67,18 +61,26 @@ function App() {
           path="/auth/signup"
           element={
             <>
-              <PageTitle title="AddUser " />
+              <PageTitle title="Signup " />
               <SignUp />
             </>
           }
         />
-
         <Route
           path="/chart"
           element={
             <>
-              <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Basic Chart" />
               <Chart />
+            </>
+          }
+        />
+        <Route
+          path="/AllProducts"
+          element={
+            <>
+              <PageTitle title="All Products" />
+              <AllProduct />
             </>
           }
         />
@@ -86,7 +88,7 @@ function App() {
           path="/homepage"
           element={
             <>
-              <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Home" />
               <HomePage />
             </>
           }
@@ -104,25 +106,17 @@ function App() {
           path="/Product/CheckoutbyId"
           element={
             <>
-              <PageTitle title="View Weaver Emb" />
+              <PageTitle title="Checkout" />
               <Checkout />
             </>
           }
         />
-
-
         <Route element={<PrivateRoute />}>
-
-
-          {/*  Products realted routes  */}
-
-
-
           <Route
             path="/tables"
             element={
               <>
-                <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <PageTitle title="Tables" />
                 <Tables />
               </>
             }
@@ -131,17 +125,16 @@ function App() {
             path="/settings"
             element={
               <>
-                <PageTitle title="Settings | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <PageTitle title="Settings" />
                 <Settings />
               </>
             }
           />
-
           <Route
             path="/ui/alerts"
             element={
               <>
-                <PageTitle title="Alerts | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <PageTitle title="Alerts" />
                 <Alerts />
               </>
             }
@@ -150,41 +143,21 @@ function App() {
             path="/ui/buttons"
             element={
               <>
-                <PageTitle title="Buttons | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <PageTitle title="Buttons" />
                 <Buttons />
               </>
             }
           />
-
-          <Route
-            path="/auth/signup"
-            element={
-              <>
-                <PageTitle title="Signup" />
-                <SignUp />
-              </>
-            }
-          />
         </Route>
-
-        {/* configurator */}
-
-
-
         <Route
           path="/Product/cart"
           element={
             <>
-              <PageTitle title="Size" />
+              <PageTitle title="Cart" />
               <ShopCart />
             </>
           }
         />
-
-
-
-        {/* seperate routes */}
-
         <Route
           path="/Product/add"
           element={
@@ -194,43 +167,34 @@ function App() {
             </>
           }
         />
-
         <Route
           path="/Product/category"
           element={
             <>
-              <PageTitle title="Add Product" />
+              <PageTitle title="Add Category" />
               <Category />
             </>
           }
         />
-
-
-
-
         <Route
           path="/brand"
           element={
             <>
-              <PageTitle title="Add Product" />
+              <PageTitle title="Add Brand" />
               <Brand />
             </>
           }
         />
-
-
-
         <Route
           path="/color"
           element={
             <>
-              <PageTitle title="Add Product" />
+              <PageTitle title="Add Color" />
               <Color />
             </>
           }
         />
-
-<Route
+        <Route
           path="/size"
           element={
             <>
@@ -244,43 +208,12 @@ function App() {
           element={
             <>
               <PageTitle title="Add Weight" />
-              <Weight/>
+              <Weight />
             </>
           }
         />
-
-
-
-
-
-
-
-
-        <Route
-          path="/Product/CheckoutbyId"
-          element={
-            <>
-              <PageTitle title="View Weaver Emb" />
-              <Checkout />
-            </>
-          }
-        />
-
-
-
-
-
-
-
-
-
-
-
       </Routes>
-
-
-
-
+      {renderHeaderFooter() && <Footer />}
     </>
   );
 }
