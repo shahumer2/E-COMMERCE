@@ -155,7 +155,7 @@ const useProduct = () => {
             const response = await fetch(url, {
                 method: method,
                 headers: {
-                    // "content-type":"multipart/form-data",
+                    "content-type":"application/json",
                     "Authorization": `Bearer ${token}`
                 },
                 body:values

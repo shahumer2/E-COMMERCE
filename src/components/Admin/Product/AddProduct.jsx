@@ -3,7 +3,7 @@ import DefaultLayout from '../../../layout/DefaultLayout';
 import { Formik, Form, Field, ErrorMessage, FieldArray } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { customStyles as createCustomStyles } from '../../../constants/utils';
+import { ADD_PRODUCT_URL, customStyles as createCustomStyles } from '../../../constants/utils';
 import { fetchcategory } from '../../../redux/Slice/CategorySlice';
 import Breadcrumb from '../../Breadcrumbs/Breadcrumb';
 import ReactSelect from 'react-select';
@@ -13,6 +13,7 @@ import { fetchbrand } from '../../../redux/Slice/BrandSlice';
 import { fetchcolor } from '../../../redux/Slice/ColorSlice';
 import { fetchsize } from '../../../redux/Slice/SizeSlice';
 import { fetchweight } from '../../../redux/Slice/WeightSlice';
+import { toast } from 'react-toastify';
 
 const AddProduct = () => {
     const theme = useSelector(state => state?.persisted?.theme);
@@ -96,7 +97,66 @@ const AddProduct = () => {
     }, [brand.data, category.data, weight.data, color.data, size.data]);
 
     console.log(weight, "klklklkl");
-    const { handleSubmit } = useProduct();
+    // const { handleSubmit } = useProduct();
+    const handleSubmit = async (values) => {
+        try {
+            const url = ADD_PRODUCT_URL;
+            const method = "POST";
+    
+            // Create FormData instance
+            const formData = new FormData();
+    
+            // Create the product object
+            const product = {};
+    
+            // Populate the product object with values excluding 'images'
+            Object.keys(values).forEach(key => {
+                if (key !== 'images') {
+                    product[key] = values[key];
+                }
+            });
+    
+            // Append the product object to FormData as a JSON string
+            formData.append('product', JSON.stringify(product));
+    
+            // Append all images under a single 'images' key
+            values.images.forEach((file) => {
+                formData.append('images', file); // All images under the 'images' key
+            });
+    
+            // Log each key-value pair in FormData for debugging
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ':', pair[1],"lololo");
+            }
+    
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    // Do not set the Content-Type header manually
+                },
+                body: formData, // Send FormData directly as the body
+            });
+    
+            const data = await response.json();
+            if (response.ok) {
+                toast.success(`Product Added successfully`);
+            } else {
+                toast.error(`${data.errorMessage}`);
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("An error occurred");
+        }
+    };
+    
+    
+    
+    
+    
+    
+    
+
     const [imagePreviews, setImagePreviews] = useState([]);
 
     const handleFileChange = (event, setFieldValue) => {
@@ -413,13 +473,13 @@ const AddProduct = () => {
                                                                         <label className="mb-2.5 block text-black dark:text-white">Color ID</label>
 
                                                                         <ReactSelect
-                                                                          
+
                                                                             name={`skus.${index}.colorId`}
                                                                             options={colors}
                                                                             classNamePrefix="react-select"
                                                                             styles={createCustomStyles(theme)}
                                                                             onChange={(selectedOptions) =>
-                                                                                setFieldValue(`skus.${index}.colorId`,selectedOptions.value)
+                                                                                setFieldValue(`skus.${index}.colorId`, selectedOptions.value)
                                                                             }
                                                                         />
                                                                         <ErrorMessage name={`skus.${index}.colorId`} component="div" className="text-red-500" />
@@ -452,13 +512,13 @@ const AddProduct = () => {
                                                                                             <label className="mb-2.5 block text-black dark:text-white">Size</label>
 
                                                                                             <ReactSelect
-                                                                                               
+
                                                                                                 name={`skus.${index}.sizes.${sizeIndex}.sizeId`}
                                                                                                 options={sizes}
                                                                                                 classNamePrefix="react-select"
                                                                                                 styles={createCustomStyles(theme)}
                                                                                                 onChange={(selectedOptions) =>
-                                                                                                    setFieldValue(`skus.${index}.sizes.${sizeIndex}.sizeId`,selectedOptions.value)
+                                                                                                    setFieldValue(`skus.${index}.sizes.${sizeIndex}.sizeId`, selectedOptions.value)
                                                                                                 }
                                                                                                 value={sizes.filter(size => values.skus[index].sizes.map(s => s.sizeId).includes(size.value))}
                                                                                             />

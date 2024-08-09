@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { signInFailure, signInSuccess, signinStart } from '../../redux/Slice/UserSlice';
-import { SIGNIN_URL } from '../../Constants/utils';
+import { SIGNIN_URL } from '../../constants/utils';
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -22,7 +22,9 @@ const SignIn = () => {
     try {
       dispatch(signinStart());
       const url = SIGNIN_URL;
+      console.log(url,"jahaaaan");
       const res = await fetch(url, {
+
         method: "POST",
         headers: {
           "Content-type": "application/json"
