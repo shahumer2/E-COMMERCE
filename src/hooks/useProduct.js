@@ -37,11 +37,12 @@ const useProduct = () => {
 
             const response = await fetch(`${GET_PRODUCT_URL}`, {
                 method: "GET",
-                headers: {
+                // headers: {
 
-                    "Authorization": `Bearer ${token}`
-                }
+                //     "Authorization": `Bearer ${token}`
+                // }
             });
+            console.log(response,"llkkllkk");
             const data = await response.json();
 
 console.log(data,"lililili");
