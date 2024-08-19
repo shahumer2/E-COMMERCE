@@ -107,6 +107,7 @@ export const DELETE_STOCK_URL = `${BASE_URL}/stockjournal/delete`
 //PRODUCTS
 export const ADD_PRODUCT_URL = `${BASE_URL}/api/products`
 export const GET_PRODUCT_URL = `${BASE_URL}/api/products/getAllProducts`
+export const GET_PRODUCTBYID_URL = `${BASE_URL}/api/products`
 
 
 export const options = {

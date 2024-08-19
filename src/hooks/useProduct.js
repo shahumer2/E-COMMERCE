@@ -1,19 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { ADD_PRODUCT_URL, GET_PRODUCT_URL } from "../constants/utils"
+import { ADD_PRODUCT_URL, GET_PRODUCT_URL,GET_PRODUCTBYID_URL } from "../constants/utils"
 
 
 import { useNavigate } from 'react-router-dom';
 
 const useProduct = () => {
-    console.log("i got here");
+    
 
     // const navigate = useNavigate();
     // const [rows, setRows] = useState([{ id: Date.now(), selectedOption1: null, selectedOption2: null, selectedOption3: [], numOfLooms: 0 }]);
     const { currentUser } = useSelector((state) => state?.persisted?.user);
     const { token } = currentUser;
     const [Product, setProduct] = useState([]);
+    const [ProductDetails, setProductDetails] = useState([])
     // const [edit, setEdit] = useState(false);
 
 
@@ -30,6 +31,7 @@ const useProduct = () => {
 
     useEffect(() => {
         getProduct();
+        getProductById();
     }, []);
 
     const getProduct = async (page) => {
@@ -42,11 +44,42 @@ const useProduct = () => {
                 //     "Authorization": `Bearer ${token}`
                 // }
             });
-            console.log(response,"llkkllkk");
+            
             const data = await response.json();
 
-console.log(data,"lililili");
+
             setProduct(data.content);
+            setPagination({
+                totalItems: data.totalElements,
+                data: data.content,
+                totalPages: data.totalPages,
+                currentPage: data.number + 1,
+                itemsPerPage: data.size,
+            });
+        } catch (error) {
+            console.error(error);
+            toast.error("Failed to fetch Product");
+        }
+    };
+
+    //product by id
+
+    const getProductById = async ({id}) => {
+        console.log(`${GET_PRODUCTBYID_URL}/${id}`,"gggggg");
+        try {
+
+            const response = await fetch(`${GET_PRODUCTBYID_URL}/${id}`, {
+                method: "GET",
+                // headers: {
+
+                //     "Authorization": `Bearer ${token}`
+                // }
+            });
+            const data = await response.json();
+            console.log(data,"llkkllkk");
+
+
+            setProductDetails(data);
             setPagination({
                 totalItems: data.totalElements,
                 data: data.content,
@@ -317,6 +350,8 @@ console.log(data,"lililili");
         // edit,
         // currentProduct,
         // GetProductById,
+        getProductById,
+        ProductDetails,
         // pagination,
         // getProduct,
         // handleDelete,

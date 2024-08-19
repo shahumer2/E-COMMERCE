@@ -21,6 +21,7 @@ import Size from "./components/Admin/Configurator/Size.jsx";
 import Brand from "./components/Admin/Configurator/Brand.jsx";
 import Weight from "./components/Admin/Configurator/Weight.jsx";
 import AllProduct from './components/HomePage/AllProducts.jsx';
+import ProductDetail from './components/HomePage/ProductDetail.jsx';
 import Header from './components/HomePage/Header';  // Import your Header component
 import Footer from './components/HomePage/Footer';  // Import your Footer component
 
@@ -39,7 +40,7 @@ function App() {
   }, []);
 
   const renderHeaderFooter = () => {
-    return !['/auth/signin', '/auth/signup'].includes(pathname) && !pathname.startsWith('/private');
+    return !['/auth/signin', '/auth/signup',"/chart","/Brand","/color","/size","/weight","/Product/category","/Product/add"].includes(pathname) && !pathname.startsWith('/private');
   };
 
   return loading ? (
@@ -76,7 +77,7 @@ function App() {
           }
         />
         <Route
-          path="/AllProducts"
+          path="Product/AllProducts"
           element={
             <>
               <PageTitle title="All Products" />
@@ -84,6 +85,17 @@ function App() {
             </>
           }
         />
+        <Route
+          path="/Product/:id"
+          element={
+            <>
+              <PageTitle title="Product Details" />
+              <ProductDetail/>
+            </>
+          }
+        />
+
+
         <Route
           path="/homepage"
           element={

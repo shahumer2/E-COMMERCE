@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import Header from './Header';
 import useProduct from '../../hooks/useProduct';
 // import './Shop.css'; // Assuming you have a CSS file for styles
-
+import { FaHeart } from "react-icons/fa";
+import { FaCartPlus } from "react-icons/fa";
+import { IoMdResize } from "react-icons/io";
+import { Link } from 'react-router-dom';
 const categories = [
   {
     id: 1,
@@ -40,35 +43,35 @@ const ShopSidebar = () => {
 
   return (
     <>
-   
-    <div className="shop__sidebar">
-      <div className="sidebar__categories">
-        <div className="section-title">
-          <h4>Categories</h4>
-        </div>
-        <div className="categories__accordion">
-          {categories.map((category) => (
-            <div className="card" key={category.id}>
-              <div className={`card-heading ${activeCategory === category.id ? 'active' : ''}`}>
-                <a onClick={() => handleToggle(category.id)}>{category.name}</a>
-              </div>
-              {activeCategory === category.id && (
-                <div className="card-body">
-                  <ul>
-                    {category.items.map((item, index) => (
-                      <li key={index}><a href="#">{item}</a></li>
-                    ))}
-                  </ul>
+
+      <div className="shop__sidebar">
+        <div className="sidebar__categories">
+          <div className="section-title">
+            <h4>Categories</h4>
+          </div>
+          <div className="categories__accordion">
+            {categories.map((category) => (
+              <div className="card" key={category.id}>
+                <div className={`card-heading ${activeCategory === category.id ? 'active' : ''}`}>
+                  <a onClick={() => handleToggle(category.id)}>{category.name}</a>
                 </div>
-              )}
-            </div>
-          ))}
+                {activeCategory === category.id && (
+                  <div className="card-body">
+                    <ul>
+                      {category.items.map((item, index) => (
+                        <li key={index}><a href="#">{item}</a></li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
+        <ShopFilter />
+        <ShopSizes />
+        <ShopColors />
       </div>
-      <ShopFilter />
-      <ShopSizes />
-      <ShopColors />
-    </div>
     </>
   );
 };
@@ -144,17 +147,18 @@ const ShopColors = () => {
   );
 };
 
-const ProductItem = ({ images, label, name, price, isSale, oldPrice }) => {
-    console.log(images[0].url,"imageeeee");
-    
+const ProductItem = ({ images, label, name, basePrice, skus, price, isSale, oldPrice,id }) => {
+  console.log(id, "imageeeee");
+
   return (
+    <Link to={`/product/${id}`}>
     <div className={`product__item ${isSale ? 'sale' : ''}`}>
       <div className="product__item__pic set-bg" style={{ backgroundImage: `url(${images[0].url})` }}>
-        {label && <div className="label">{label}</div>}
+        <div className="label bg-green-600">New</div>
         <ul className="product__hover">
-          <li><a href={images.url} className="image-popup"><span className="arrow_expand"></span></a></li>
-          <li><a href="#"><span className="icon_heart_alt"></span></a></li>
-          <li><a href="#"><span className="icon_bag_alt"></span></a></li>
+          <li><a href={images[0].url} className="image-popup"><span className="arrow_expand"><IoMdResize /></span></a></li>
+          <li><a href="#"><span className="icon_heart_alt"><FaHeart /></span></a></li>
+          <li><a href="#"><span className="icon_bag_alt"><FaCartPlus /></span></a></li>
         </ul>
       </div>
       <div className="product__item__text">
@@ -166,18 +170,35 @@ const ProductItem = ({ images, label, name, price, isSale, oldPrice }) => {
           <i className="fa fa-star"></i>
           <i className="fa fa-star"></i>
         </div>
-        <div className="product__price">
-          ${price} {isSale && <span>${oldPrice}</span>}
+        <div className="product__price-container flex-row">
+          <div className="product__price line-through">
+            ${basePrice}
+            {isSale && <span className="sale-price">${oldPrice}</span>}
+          </div>
+
+          {
+            skus?.map((sku) => {
+
+              return (
+
+                <span>{sku?.price}</span>
+              )
+            })
+
+          }
         </div>
+
       </div>
+
     </div>
+    </Link>
   );
 };
 
 const AllProduct = () => {
-    const {Product} = useProduct();
-    console.log(Product,'majnh');
-    
+  const { Product } = useProduct();
+  console.log(Product, 'majnh');
+
   const products = [
     { image: 'img/shop/shop-1.jpg', label: 'New', name: 'Furry hooded parka', price: 59.0 },
     { image: 'img/shop/shop-2.jpg', name: 'Flowy striped skirt', price: 49.0 },

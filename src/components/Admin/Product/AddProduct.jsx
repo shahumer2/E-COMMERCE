@@ -206,7 +206,9 @@ const AddProduct = () => {
                             {
                                 sku: "",
                                 price: 0,
-                                colorId: 1, // Single value
+                                color: {
+                                    id:1
+                                }, // Single value
                                 sizes: [{ sizeId: 0, quantity: 0 }],
                                 weights: [{ weightId: 0, quantity: 0 }],
                                 attributes: [{ name: "", value: "" }]
@@ -494,7 +496,7 @@ const AddProduct = () => {
                                                                             classNamePrefix="react-select"
                                                                             styles={createCustomStyles(theme)}
                                                                             onChange={(selectedOptions) =>
-                                                                                setFieldValue(`skus.${index}.colorId`, selectedOptions.value)
+                                                                                setFieldValue(`skus.${index}.color.id`, selectedOptions.value)
                                                                             }
                                                                         />
                                                                         <ErrorMessage name={`skus.${index}.colorId`} component="div" className="text-red-500" />
