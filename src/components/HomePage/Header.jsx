@@ -12,7 +12,7 @@ const Header = () => {
     const dispatch = useDispatch();
     const state = useSelector((state) => state);
     const { currentUser } = state.persisted.user;
-    console.log(currentUser,"juju");
+   
     const [isOffcanvasOpen, setIsOffcanvasOpen] = useState(false);
 
     const toggleOffcanvas = () => {

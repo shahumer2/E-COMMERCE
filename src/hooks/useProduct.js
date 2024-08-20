@@ -64,8 +64,8 @@ const useProduct = () => {
 
     //product by id
 
-    const getProductById = async ({id}) => {
-        console.log(`${GET_PRODUCTBYID_URL}/${id}`,"gggggg");
+    const getProductById = async (id) => {
+       console.log(id,"meihhhhhhhhhhhhhhhhhhhhhhh");
         try {
 
             const response = await fetch(`${GET_PRODUCTBYID_URL}/${id}`, {

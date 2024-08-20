@@ -102,13 +102,13 @@ const AddProduct = () => {
     //     try {
     //         const url = ADD_PRODUCT_URL;
     //         const method = "POST";
-    
+
     //         // Create FormData instance
     //         const formData = new FormData();
-    
+
     //         // Create the product object
     //         const product = {};
-    
+
     //         // Populate the product object with values excluding 'images'
     //         Object.keys(values).forEach(key => {
     //             if (key !== 'images') {
@@ -132,20 +132,20 @@ const AddProduct = () => {
     //                 }
     //             }
     //         });
-    
+
     //         // Append the product object to FormData as a JSON string
     //         formData.append('product', JSON.stringify(product));
-    
+
     //         // Append images array to FormData
     //         values.images.forEach((file) => {
     //             formData.append('images', file);
     //         });
-    
+
     //         // Log each key-value pair in FormData
     //         for (let pair of formData.entries()) {
     //             console.log(pair[0] + ':', pair[1]);
     //         }
-    
+
     //         const response = await fetch(url, {
     //             method: method,
     //             headers: {
@@ -154,7 +154,7 @@ const AddProduct = () => {
     //             },
     //             body: formData, // Send FormData directly as the body
     //         });
-    
+
     //         const data = await response.json();
     //         if (response.ok) {
     //             toast.success(`Product Added successfully`);
@@ -166,11 +166,11 @@ const AddProduct = () => {
     //         toast.error("An error occurred");
     //     }
     // };
-    
-    
-    
-    
-    
+
+
+
+
+
 
     const [imagePreviews, setImagePreviews] = useState([]);
 
@@ -206,9 +206,9 @@ const AddProduct = () => {
                             {
                                 sku: "",
                                 price: 0,
-                                color: {
-                                    id:1
-                                }, // Single value
+                                colors: [{
+                                    id: 1
+                                }], // Single value
                                 sizes: [{ sizeId: 0, quantity: 0 }],
                                 weights: [{ weightId: 0, quantity: 0 }],
                                 attributes: [{ name: "", value: "" }]
@@ -447,10 +447,10 @@ const AddProduct = () => {
                                                                 </div>
 
                                                                 {/* Attributes */}
-                                                                <FieldArray name={` skus.${index}.attributes`}>
+                                                                <FieldArray name={`skus.${index}.attributes`}>
                                                                     {({ push: pushAttribute, remove: removeAttribute }) => (
                                                                         <div className="flex flex-col gap-4 mb-4.5">
-                                                                            {values. skus[index].attributes.map((attribute, attrIndex) => (
+                                                                            {values.skus[index].attributes.map((attribute, attrIndex) => (
                                                                                 <div key={attrIndex} className="flex flex-wrap gap-6">
                                                                                     <div className="flex-1 min-w-[300px]">
                                                                                         <label className="mb-2.5 block text-black dark:text-white">Attribute Name</label>
@@ -485,23 +485,38 @@ const AddProduct = () => {
                                                                 </FieldArray>
 
                                                                 {/* Color ID */}
-                                                                <div className="mb-4.5 flex flex-wrap gap-6">
-                                                                    <div className="flex-1 min-w-[300px]">
-                                                                        <label className="mb-2.5 block text-black dark:text-white">Color ID</label>
+                                                                <FieldArray name={`skus.${index}.colors`}>
+                                                                    {({ push: pushColor, remove: removeColor }) => (
+                                                                        <div className="mb-4.5 flex flex-col gap-4">
+                                                                            {values.skus[index].colors.map((color, colorIndex) => (
+                                                                                <div key={colorIndex} className="flex flex-wrap gap-6">
+                                                                                    <div className="flex-1 min-w-[300px]">
+                                                                                        <label className="mb-2.5 block text-black dark:text-white">Color ID</label>
 
-                                                                        <ReactSelect
-
-                                                                            name={`skus.${index}.colorId`}
-                                                                            options={colors}
-                                                                            classNamePrefix="react-select"
-                                                                            styles={createCustomStyles(theme)}
-                                                                            onChange={(selectedOptions) =>
-                                                                                setFieldValue(`skus.${index}.color.id`, selectedOptions.value)
-                                                                            }
-                                                                        />
-                                                                        <ErrorMessage name={`skus.${index}.colorId`} component="div" className="text-red-500" />
-                                                                    </div>
-                                                                </div>
+                                                                                        <ReactSelect
+                                                                                            name={`skus.${index}.colors.${colorIndex}.id`}
+                                                                                            options={colors}
+                                                                                            classNamePrefix="react-select"
+                                                                                            styles={createCustomStyles(theme)}
+                                                                                            onChange={(selectedOption) =>
+                                                                                                setFieldValue(`skus.${index}.colors.${colorIndex}.id`, selectedOption.value)
+                                                                                            }
+                                                                                        />
+                                                                                        <ErrorMessage name={`skus.${index}.colors.${colorIndex}.id`} component="div" className="text-red-500" />
+                                                                                    </div>
+                                                                                    <div className="flex items-end min-w-[50px]">
+                                                                                        <button type="button" className="p-2.5 border rounded-md text-red-500" onClick={() => removeColor(colorIndex)}>
+                                                                                            Remove
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            ))}
+                                                                            <button type="button" className="p-2.5 border rounded-md text-green-500" onClick={() => pushColor({ colorId: '' })}>
+                                                                                <IoIosAdd size={24} />
+                                                                            </button>
+                                                                        </div>
+                                                                    )}
+                                                                </FieldArray>
 
                                                                 {/* Size or Weight Selection */}
                                                                 <div className="flex flex-col gap-4 mb-4.5">

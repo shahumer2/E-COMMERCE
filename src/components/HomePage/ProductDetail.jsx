@@ -20,8 +20,9 @@ const ProductDetail = () => {
     const { ProductDetails, getProductById } = useProduct();
 
     useEffect(() => {
-        getProductById(params);
-    }, []);
+        getProductById(params.id);
+
+    }, [params.id]);
 
     const [isExpanded, setIsExpanded] = useState(false);
     const [activeTab, setActiveTab] = useState('description');
@@ -57,19 +58,19 @@ const ProductDetail = () => {
         }
     };
     const [rating, setRating] = useState(0);
-console.log(currentUser,"curr");
+
     const handleRatingChange = (rate) => {
         setRating(rate);
         setreview({
             ...review,
-            review:rate
+            review: rate
         })
     };
     const onCommentChange = (e) => {
         setreview({
             ...review,
-            comment:e.target.value,
-            productId:params.id
+            comment: e.target.value,
+            productId: params.id
         });
     };
 
@@ -80,10 +81,16 @@ console.log(currentUser,"curr");
 
             console.log('Review submitted with rating:', review);
         }
-        else{
+        else {
             toast.error("Please login to submit review");
         }
         // Handle form submission logic here
+    };
+    const handleColorChange = (event, colorId) => {
+        console.log(colorId, "color selected");
+        // Update the form data with the selected color ID
+        // Assuming you're using a form handler like Formik or a custom handler
+        // formik.setFieldValue('colorId', colorId); 
     };
 
     return (
@@ -97,9 +104,10 @@ console.log(currentUser,"curr");
                     truncateDescription={truncateDescription}
                     handleToggle={handleToggle}
                     handleCartClick={handleCartClick}
+                    handleColorChange={handleColorChange}
                 />
                 <ProductDetailsTab Product={ProductDetails} activeTab={activeTab} handleTabClick={handleTabClick} />
-                <Review activeTab={activeTab} handleTabClick={handleTabClick} rating={rating} handleSubmit={handleSubmit} onCommentChange={onCommentChange} handleRatingChange={handleRatingChange}/>
+                <Review activeTab={activeTab} handleTabClick={handleTabClick} rating={rating} handleSubmit={handleSubmit} onCommentChange={onCommentChange} handleRatingChange={handleRatingChange} />
             </div>
         </div>
     );
@@ -142,7 +150,7 @@ const ProductDetailsPic = ({ images }) => (
     </div>
 );
 
-const ProductDetailsText = ({ Product, expanded, truncateDescription, handleToggle, handleCartClick }) => (
+const ProductDetailsText = ({ Product, expanded, truncateDescription, handleToggle, handleCartClick, handleColorChange }) => (
     <div className="col-lg-6">
         <div className="product__details__text">
             <h3>{Product?.name}</h3>
@@ -176,12 +184,14 @@ const ProductDetailsText = ({ Product, expanded, truncateDescription, handleTogg
                     <span className="icon_bag_alt"></span> Add to cart
                 </button>
             </div>
-            <ProductDetailsWidget Product={Product} />
+            <ProductDetailsWidget Product={Product} handleColorChange={handleColorChange} />
         </div>
     </div>
 );
 
-const ProductDetailsWidget = ({ Product }) => (
+const ProductDetailsWidget = ({ Product, handleColorChange }) => (
+
+
     <div className="product__details__widget">
         <ul>
             <li>
@@ -196,37 +206,42 @@ const ProductDetailsWidget = ({ Product }) => (
             </li>
             <li>
                 <span>Available color:</span>
-                <div className="color__checkbox">
-                    <label htmlFor="red">
-                        <input type="radio" name="color__radio" id="red" />
-                        <span className="checkmark"></span>
-                    </label>
-                    <label htmlFor="black">
-                        <input type="radio" name="color__radio" id="black" />
-                        <span className="checkmark black-bg"></span>
-                    </label>
-                    <label htmlFor="grey">
-                        <input type="radio" name="color__radio" id="grey" />
-                        <span className="checkmark grey-bg"></span>
-                    </label>
-                </div>
+                {/* <div className="color__checkbox">
+                    {Product.skus.map((sku, index) => (
+                        <label key={index} htmlFor={sku.color.name}>
+                            <input
+                                type="radio"
+                                name="color__radio"
+                                id={sku.color.name}
+                                value={sku.color.name}
+                                onChange={(e) => handleColorChange(e, sku.color.id)}
+                            />
+                            <span
+                                className={`checkmark ${sku.color.name}-bg`}
+                                style={{ backgroundColor: sku.color.name }}
+                            ></span>
+                        </label>
+                    ))}
+                </div> */}
             </li>
+
             <li>
                 <span>Available size:</span>
                 <div className="size__btn">
-                    <label htmlFor="xs-btn" className="active">xs
-                        <input type="radio" id="xs-btn" />
-                    </label>
-                    <label htmlFor="s-btn">s
-                        <input type="radio" id="s-btn" />
-                    </label>
-                    <label htmlFor="m-btn">m
-                        <input type="radio" id="m-btn" />
-                    </label>
-                    <label htmlFor="l-btn">l
-                        <input type="radio" id="l-btn" />
-                    </label>
+                    {Product.skus && Product.skus.length > 0 && Product.skus[0].sizes && Product.skus[0].sizes.map((sizeObj, index) => (
+                        <label key={index} htmlFor={`${sizeObj.size.name}-btn`}>
+                            {sizeObj.size.name}
+                            <input
+                                type="radio"
+                                id={`${sizeObj.size.name}-btn`}
+                                name="size__radio"
+                                value={sizeObj.size.id}
+                                onChange={() => handleSizeChange(sizeObj.size.id)} // Function to handle size selection
+                            />
+                        </label>
+                    ))}
                 </div>
+
             </li>
             <li>
                 <span>Promotions:</span>
@@ -283,7 +298,7 @@ const ProductDetailsTab = ({ Product, activeTab, handleTabClick }) => (
     </div>
 );
 
-const Review = ({ activeTab, handleTabClick,rating,handleRatingChange ,handleSubmit, onCommentChange}) => {
+const Review = ({ activeTab, handleTabClick, rating, handleRatingChange, handleSubmit, onCommentChange }) => {
     // Assuming you have a function to handle form submission and other logic
     return (
         <div className="review-container">
